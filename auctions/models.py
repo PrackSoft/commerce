@@ -23,8 +23,14 @@ class Listing(models.Model):
     # Relations
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")  # Creator
 
+    class Meta:
+            constraints = [
+                models.CheckConstraint(check=models.Q(starting_bid__gt=0), name="starting_bid_gt_0")
+            ]
+
     def __str__(self):
         return self.title
+
 
 class Watchlist(models.Model):
     # Relations

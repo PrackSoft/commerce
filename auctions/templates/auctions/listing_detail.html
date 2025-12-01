@@ -9,12 +9,23 @@
         {% if listing.image_url %}
             <img src="{{ listing.image_url }}" alt="{{ listing.title }}">
         {% endif %}
-        {% if request.user.is_authenticated %}
+        {% if request.user.is_authenticated and request.user != listing.owner %}
             <form method="post" action="{% url 'toggle_watchlist' listing.id %}">
                 {% csrf_token %}
                 <input type="submit" value="{% if is_watching %}Remove from Watchlist{% else %}Add to Watchlist{% endif %}">
             </form>
         {% endif %}
+        {% if request.user.is_authenticated and request.user != listing.owner %}
+            <form method="post" action="{% url 'place_bid' listing.id %}">
+                {% csrf_token %}
+                <input type="number" step="0.01" name="bid_amount" placeholder="Enter your bid" required>
+                <input type="submit" value="Place a Bid">
+            </form>
+            {% if error %}
+                <p style="color:red">{{ error }}</p>
+            {% endif %}
+        {% endif %}
+
     </div>
 
 {% endblock %}

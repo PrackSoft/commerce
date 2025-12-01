@@ -1,8 +1,9 @@
 from .models import Listing, Watchlist
+from decimal import Decimal
 
 def get_current_price(listing):
     highest_bid = listing.bids.order_by("-amount").first()
-    return highest_bid.amount if highest_bid else listing.starting_bid
+    return Decimal(highest_bid.amount) if highest_bid else Decimal(listing.starting_bid)
 
 def add_to_watchlist(user, listing):
     # Adds a listing to the user's watchlist

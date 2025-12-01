@@ -4,17 +4,16 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
+from django.views.decorators.cache import never_cache
+
+from decimal import Decimal
 
 from .forms import ListingForm
-from .models import User, Listing, Watchlist
+from .models import User, Listing, Watchlist, Bid
 
 from .utils import get_current_price, add_to_watchlist, remove_from_watchlist
 
 
-
-#def index(request):
-    #active_listings = Listing.objects.filter(is_active=True) # fetch all active listings from the database...
-    #return render(request, "auctions/index.html", {"listings": active_listings}) # ...and pass them to the template
 def index(request):
     active_listings = Listing.objects.filter(is_active=True)
     for listing in active_listings:
@@ -73,6 +72,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
+
 # My views
 @login_required
 def create_listing(request):
@@ -88,9 +88,10 @@ def create_listing(request):
         form = ListingForm()
     return render(request, "auctions/create_listing.html", {"form": form})
 
+@never_cache
 def listing_detail(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
-    current_price = get_current_price(listing)
+    current_price = Decimal(get_current_price(listing))
 
     is_watching = False
     if request.user.is_authenticated:
@@ -102,6 +103,7 @@ def listing_detail(request, listing_id):
     "is_watching": is_watching
 })
 
+
 @login_required
 def toggle_watchlist(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
@@ -111,3 +113,37 @@ def toggle_watchlist(request, listing_id):
         add_to_watchlist(request.user, listing)
     return redirect('listing_detail', listing_id=listing.id)
 
+    
+@never_cache
+@login_required
+def place_bid(request, listing_id):
+    listing = get_object_or_404(Listing, pk=listing_id)
+    current_price = get_current_price(listing)  # Decimal
+
+    if request.method == "POST":
+        try:
+            bid_amount = Decimal(request.POST["bid_amount"])
+        except (KeyError, ValueError):
+            return render(request, "auctions/listing_detail.html", {
+                "listing": listing,
+                "current_price": current_price,
+                "error": "Invalid bid amount."
+            })
+
+        # Always compare against current_price
+        if bid_amount <= current_price:
+            error_msg = f"Your bid must be greater than the current price (${current_price})."
+            return render(request, "auctions/listing_detail.html", {
+                "listing": listing,
+                "current_price": current_price,
+                "error": error_msg
+            })
+
+        # Bid is valid
+        Bid.objects.create(amount=bid_amount, bidder=request.user, listing=listing)
+        return redirect("listing_detail", listing_id=listing.id)
+
+    return render(request, "auctions/listing_detail.html", {
+        "listing": listing,
+        "current_price": current_price
+    })
