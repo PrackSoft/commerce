@@ -26,6 +26,14 @@ class Listing(models.Model):
     def __str__(self):
         return self.title
 
+class Watchlist(models.Model):
+    # Relations
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="watchlist_entries")  # User following
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="watchlist_entries")    # Listing followed
+
+    def __str__(self):
+        return f"{self.user.username} - {self.listing.title}"
+
 
 class Bid(models.Model):
     # Bid amount

@@ -9,6 +9,12 @@
         {% if listing.image_url %}
             <img src="{{ listing.image_url }}" alt="{{ listing.title }}">
         {% endif %}
+        {% if request.user.is_authenticated %}
+            <form method="post" action="{% url 'toggle_watchlist' listing.id %}">
+                {% csrf_token %}
+                <input type="submit" value="{% if is_watching %}Remove from Watchlist{% else %}Add to Watchlist{% endif %}">
+            </form>
+        {% endif %}
     </div>
 
 {% endblock %}

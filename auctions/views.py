@@ -6,9 +6,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
 from .forms import ListingForm
-from .models import User, Listing
+from .models import User, Listing, Watchlist
 
-from .utils import get_current_price
+from .utils import get_current_price, add_to_watchlist, remove_from_watchlist
 
 
 
@@ -91,8 +91,23 @@ def create_listing(request):
 def listing_detail(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
     current_price = get_current_price(listing)
+
+    is_watching = False
+    if request.user.is_authenticated:
+        is_watching = Watchlist.objects.filter(user=request.user, listing=listing).exists()
+
     return render(request, "auctions/listing_detail.html", {
     "listing": listing,
-    "current_price": current_price  # esta variable se pasa al template
+    "current_price": current_price,
+    "is_watching": is_watching
 })
+
+@login_required
+def toggle_watchlist(request, listing_id):
+    listing = get_object_or_404(Listing, pk=listing_id)
+    if Watchlist.objects.filter(user=request.user, listing=listing).exists():
+        remove_from_watchlist(request.user, listing)
+    else:
+        add_to_watchlist(request.user, listing)
+    return redirect('listing_detail', listing_id=listing.id)
 
