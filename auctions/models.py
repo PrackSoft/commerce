@@ -5,6 +5,8 @@ from django.db import models
 class User(AbstractUser):
     pass
 
+
+# My models
 class Listing(models.Model):
     # Basic listing info
     title = models.CharField(max_length=100)  # Title of the listing

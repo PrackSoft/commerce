@@ -1,0 +1,14 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+    <div>
+        {{ field.label_tag }}
+        {{ field }}
+    </div>
+    {% endfor %}
+    <input type="submit" value="Create Listing">
+</form>
+{% endblock %}
