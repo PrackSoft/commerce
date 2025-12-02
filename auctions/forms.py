@@ -6,7 +6,15 @@ class ListingForm(forms.ModelForm):
         model = Listing
         fields = ['title', 'description', 'starting_bid', 'category', 'image_url']
 
-    class CommentForm(forms.ModelForm):
-        class Meta:
-            model = Comment
-            fields = ['text']
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']
+        widgets = {
+            'text': forms.Textarea(attrs={'rows': 2, 'cols': 40, 'placeholder': 'Write a comment...'})
+        }

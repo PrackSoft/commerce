@@ -39,6 +39,20 @@
         {% endif %}
     {% endif %}
 
+    {% if request.user.is_authenticated %}
+        <form method="post" action="{% url 'add_comment' listing.id %}">
+            {% csrf_token %}
+            {{ form.text }}
+            <input type="submit" value="Save">
+        </form>
+    {% endif %}
+    <h3>Comments:</h3>
+    {% for comment in comments %}
+        <div>{{ comment.author }}: {{ comment.text }}</div>
+    {% empty %}
+        <p>No comments yet.</p>
+    {% endfor %}
+
 </div>
 
 {% endblock %}

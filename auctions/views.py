@@ -8,8 +8,8 @@ from django.views.decorators.cache import never_cache
 
 from decimal import Decimal
 
-from .forms import ListingForm
-from .models import User, Listing, Watchlist, Bid
+from .forms import ListingForm, CommentForm
+from .models import User, Listing, Watchlist, Bid, Comment
 
 from .utils import get_current_price, add_to_watchlist, remove_from_watchlist
 
@@ -74,6 +74,7 @@ def register(request):
 
 
 # My views
+@never_cache
 @login_required
 def create_listing(request):
     if request.method == "POST":
@@ -115,15 +116,20 @@ def listing_detail(request, listing_id):
             else:  
                 message = f"Auction closed. No bids were placed. Starting bid: ${listing.starting_bid}"  
 
-    return render(request, "auctions/listing_detail.html", {  
-        "listing": listing,  
-        "current_price": current_price,  
-        "is_watching": is_watching,  
-        "current_owner": current_owner,  
-        "show_message": show_message,  
-        "message": message  
-    })
+    # Comentarios y formulario
+    comments = Comment.objects.filter(listing=listing).order_by('-id')  # más recientes primero
+    form = CommentForm()
 
+    return render(request, "auctions/listing_detail.html", {  
+        "listing": listing,
+        "current_price": current_price,
+        "is_watching": is_watching,
+        "current_owner": current_owner,
+        "show_message": show_message,
+        "message": message,
+        "comments": comments,
+        "form": form
+    })
 
 
 @login_required
@@ -199,3 +205,19 @@ def close_auction(request, listing_id):
         return redirect("listing_detail", listing_id=listing.id)
 
     return redirect("listing_detail", listing_id=listing.id)
+
+
+@never_cache
+@login_required
+def add_comment(request, listing_id):
+    listing = get_object_or_404(Listing, pk=listing_id)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.listing = listing
+            comment.save()
+    return redirect('listing_detail', listing_id=listing.id)
+
