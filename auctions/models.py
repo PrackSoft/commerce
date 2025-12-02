@@ -16,7 +16,8 @@ class Listing(models.Model):
     # Optional fields
     image_url = models.URLField(blank=True, null=True)   # Optional image
     category = models.CharField(max_length=50, blank=True, null=True)  # Optional category
-    
+    winner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name="won_listings")
+
     # State
     is_active = models.BooleanField(default=True)  # Controls open/closed auction
     

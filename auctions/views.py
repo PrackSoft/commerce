@@ -92,16 +92,38 @@ def create_listing(request):
 def listing_detail(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
     current_price = Decimal(get_current_price(listing))
+    
+    is_watching = False  
+    if request.user.is_authenticated:  
+        is_watching = Watchlist.objects.filter(user=request.user, listing=listing).exists()  
 
-    is_watching = False
-    if request.user.is_authenticated:
-        is_watching = Watchlist.objects.filter(user=request.user, listing=listing).exists()
+    # Determine current price owner  
+    highest_bid = listing.bids.order_by("-amount").first()  
+    if highest_bid:  
+        current_owner = highest_bid.bidder.username  
+    else:  
+        current_owner = listing.owner.username  
 
-    return render(request, "auctions/listing_detail.html", {
-    "listing": listing,
-    "current_price": current_price,
-    "is_watching": is_watching
-})
+    # Show auction result message if closed and user is creator or winner  
+    show_message = False  
+    message = ""  
+    if not listing.is_active and request.user.is_authenticated:  
+        if request.user == listing.owner or request.user == listing.winner:  
+            show_message = True  
+            if listing.winner:  
+                message = f"Auction closed. Final price: ${current_price} won by {listing.winner.username}."  
+            else:  
+                message = f"Auction closed. No bids were placed. Starting bid: ${listing.starting_bid}"  
+
+    return render(request, "auctions/listing_detail.html", {  
+        "listing": listing,  
+        "current_price": current_price,  
+        "is_watching": is_watching,  
+        "current_owner": current_owner,  
+        "show_message": show_message,  
+        "message": message  
+    })
+
 
 
 @login_required
@@ -113,7 +135,7 @@ def toggle_watchlist(request, listing_id):
         add_to_watchlist(request.user, listing)
     return redirect('listing_detail', listing_id=listing.id)
 
-    
+
 @never_cache
 @login_required
 def place_bid(request, listing_id):
@@ -147,3 +169,33 @@ def place_bid(request, listing_id):
         "listing": listing,
         "current_price": current_price
     })
+
+
+@never_cache
+@login_required
+def close_auction(request, listing_id):
+    listing = get_object_or_404(Listing, pk=listing_id)
+
+    if request.method == "POST" and request.user == listing.owner and listing.is_active:
+        listing.is_active = False
+
+        # Determine highest bid
+        highest_bid = listing.bids.order_by("-amount").first()
+        if highest_bid:
+            listing.winner = highest_bid.bidder
+            paid_price = highest_bid.amount
+        else:
+            listing.winner = None
+            paid_price = listing.starting_bid
+
+        listing.save()
+
+        # Build message
+        if listing.winner:
+            request.session['auction_message'] = f"Auction closed. Final price: ${paid_price} won by {listing.winner.username}."
+        else:
+            request.session['auction_message'] = f"Auction closed. Final price: ${paid_price}. No bids were placed."
+
+        return redirect("listing_detail", listing_id=listing.id)
+
+    return redirect("listing_detail", listing_id=listing.id)
