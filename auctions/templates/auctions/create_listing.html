@@ -1,14 +1,14 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<form method="post">
-    {% csrf_token %}
-    {% for field in form %}
+<form method="post">                                <!-- Uses a POST method to securely submit form data to the server. -->
+    {% csrf_token %}                                <!-- Includes CSRF protection to prevent cross-site request forgery attacks. -->
+    {% for field in form %}                         <!-- Iterates over all fields in the form dynamically, reducing template repetition and making it easier to maintain.-->
     <div>
         {{ field.label_tag }}
         {{ field }}
     </div>
     {% endfor %}
-    <input type="submit" value="Create Listing">
+    <input type="submit" value="Create Listing">    <!-- Provides a simple submit button to create a new listing, completing the form interaction flow. -->
 </form>
 {% endblock %}

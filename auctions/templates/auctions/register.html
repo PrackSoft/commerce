@@ -1,17 +1,19 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-
+    <!-- Provides a clear registration form with a heading for context. -->
     <h2>Register</h2>
 
-    {% if message %}
+    {% if message %}    <!-- Displays feedback messages conditionally to inform the user of errors or status updates. -->
         <div>{{ message }}</div>
     {% endif %}
-
+    <!-- Uses a POST method with CSRF protection to securely submit user credentials. -->
     <form action="{% url 'register' %}" method="post">
         {% csrf_token %}
+        <!-- Applies Bootstrap classes (form-control and btn btn-primary) for consistent styling and responsive design.-->
+        <!-- Includes fields for username, email, password, and password confirmation to meet registration requirements. -->
         <div class="form-group">
-            <input class="form-control" autofocus type="text" name="username" placeholder="Username">
+            <input class="form-control" autofocus type="text" name="username" placeholder="Username">   <!-- Autofocuses the username field to improve usability. -->
         </div>
         <div class="form-group">
             <input class="form-control" type="email" name="email" placeholder="Email Address">
@@ -25,6 +27,6 @@
         <input class="btn btn-primary" type="submit" value="Register">
     </form>
 
-    Already have an account? <a href="{% url 'login' %}">Log In here.</a>
+    Already have an account? <a href="{% url 'login' %}">Log In here.</a>   <!-- Offers a link to the login page for users who already have an account, enhancing navigation. -->
 
 {% endblock %}

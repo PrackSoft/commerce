@@ -2,13 +2,13 @@
 
 {% block body %}
     <h2>Categories</h2>
-    {% for category in categories %}
-        <a href="{% url 'category_listings' category %}">
-            <div class="category-item">
-                <p>{{ category }}</p>
+    {% for category in categories %}                        <!-- Iterates over all available categories, dynamically generating links to their respective listings pages. -->
+        <a href="{% url 'category_listings' category %}">   <!-- Uses Django’s url-template tag to generate links, ensuring correct URL resolution and maintainability. -->
+            <div class="category-item">                     <!-- Wraps each category in a semantic block (<div> with class category-item) for easier styling and layout control.-->
+                <p>{{ category }}</p>                       <!-- Displays the category name within a <p> tag, maintaining clear content structure. -->
             </div>
         </a>
-    {% empty %}
+    {% empty %}                                             <!-- Handles the case of no available categories gracefully with the empty-block, improving user experience. -->
         <p>No categories available.</p>
     {% endfor %}
 {% endblock %}
