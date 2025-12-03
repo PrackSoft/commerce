@@ -7,6 +7,7 @@
             <div class="listings">                                                  <!-- Wraps each listing in a <div> with class listings for consistent styling and layout. -->
                 <!-- Shows key information for each listing: title, description, and current price. -->
                 <h3>{{ listing.title }}</h3>
+                <p>Seller: {{ listing.owner }}</p>
                 <p>{{ listing.description }}</p>
                 <p>Current price: ${{ listing.current_price }}</p>
                 {% if listing.image_url %}                                          <!-- Conditionally renders listing images only if a URL is provided, preventing broken image links. -->

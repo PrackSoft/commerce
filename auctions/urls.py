@@ -44,4 +44,10 @@ urlpatterns = [
 
     path("categories/<str:category_name>/", views.category_listings, name="category_listings"), 
     # Page showing all active listings filtered by the selected category.
+
+    path("my_purchases/", views.my_purchases, name="my_purchases"), 
+    # Page showing all active bidings and won listings.
+
+    path("my_listings/", views.my_listings, name="my_listings"), 
+    # Page showing all created listings by seller.
 ]

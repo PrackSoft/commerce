@@ -323,6 +323,8 @@ def add_comment(request, listing_id):
 def watchlist(request):
     # Fetch all active listings in user's watchlist
     listings = Listing.objects.filter(watchlist_entries__user=request.user, is_active=True)
+    for listing in listings:
+        listing.current_price = get_current_price(listing)  # attach current price
 
     return render(request, "auctions/watchlist.html", {
         "listings": listings
@@ -347,4 +349,49 @@ def categories_view(request):
 
     return render(request, "auctions/categories.html", {
         "categories": categories
+    })
+
+
+@login_required
+def my_purchases(request):
+    # Fetch all listings where user placed a bid
+    bids = Bid.objects.filter(bidder=request.user).select_related('listing')
+    listings = {bid.listing for bid in bids}  # Remove duplicates
+
+    # Filter listings
+    visible_listings = []
+    for listing in listings:
+        if listing.owner == request.user:
+            continue  # Owner never sees their own listings
+        if listing.is_active:
+            visible_listings.append(listing)
+        else:
+            # Show inactive only if user is winner
+            if listing.winner == request.user:
+                visible_listings.append(listing)
+
+    # Attach current price to each listing
+    for listing in visible_listings:
+        listing.current_price = get_current_price(listing)
+
+    return render(request, "auctions/my_purchases.html", {
+        "listings": visible_listings
+    })
+
+
+@login_required
+def my_listings(request):
+    # Fetch all listings created by the current user (both active and inactive)
+    listings = Listing.objects.filter(owner=request.user).order_by('-id')
+
+    # Attach a safe current_price to each listing to avoid template errors
+    for listing in listings:
+        try:
+            listing.current_price = Decimal(get_current_price(listing))
+        except Exception:
+            # Fallback to starting_bid if price calculation fails
+            listing.current_price = listing.starting_bid
+
+    return render(request, "auctions/my_listings.html", {
+        "listings": listings
     })

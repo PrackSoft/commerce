@@ -1,0 +1,27 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>My Listings</h2> <!-- Shows listings created by the authenticated user -->
+
+    {% for listing in listings %}
+        <a href="{% url 'listing_detail' listing.id %}">
+            <div class="listings"> <!-- Consistent style container -->
+                <h3>{{ listing.title }}</h3> <!-- Listing title -->
+                <p>{{ listing.description }}</p> <!-- Short description -->
+                <p>Current price: ${{ listing.current_price }}</p> <!-- Price assigned in view -->
+
+                {% if listing.is_active %}
+                    <p>Status: Active</p> <!-- Clearly show if auction is ongoing -->
+                {% else %}
+                    <p>Status: Closed</p> <!-- Listing finished -->
+                {% endif %}
+
+                {% if listing.image_url %}
+                    <img src="{{ listing.image_url }}" alt="{{ listing.title }}"> <!-- Avoid broken images -->
+                {% endif %}
+            </div>
+        </a>
+    {% empty %}
+        <p>You have not created any listings.</p> <!-- Empty fallback message -->
+    {% endfor %}
+{% endblock %}
