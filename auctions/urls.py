@@ -15,4 +15,8 @@ urlpatterns = [
     path("close/<int:listing_id>", views.close_auction, name="close_auction"),
     path("add_comment/<int:listing_id>", views.add_comment, name="add_comment"),
     path("watchlist/", views.watchlist, name="watchlist"),
+    # Página que lista TODAS las categorías
+    path("categories/", views.categories_view, name="categories"),
+    # Página que lista los listings filtrados por UNA categoría
+    path("categories/<str:category_name>/", views.category_listings, name="category_listings"),  # listings por categoría
 ]

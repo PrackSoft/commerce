@@ -234,3 +234,25 @@ def watchlist(request):
     return render(request, "auctions/watchlist.html", {
         "listings": listings
     })
+
+
+@login_required
+def category_listings(request, category_name):
+    # Trae todos los listings que el usuario tiene en su watchlist
+    listings = Listing.objects.filter(is_active=True, category=category_name)
+    # Sacamos las categorías únicas de los listings activos
+    #categories = sorted({listing.category_listings for listing in listings if listing.category_listings})
+
+    return render(request, "auctions/category_listings.html", {
+        "category_name": category_name,
+        "listings": listings
+    })
+
+
+@login_required
+def categories_view(request):
+    listings = Listing.objects.filter(is_active=True)
+    categories = sorted({listing.category for listing in listings if listing.category})
+    return render(request, "auctions/categories.html", {
+        "categories": categories
+    })
