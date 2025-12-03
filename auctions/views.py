@@ -17,9 +17,12 @@ from .utils import get_current_price, add_to_watchlist, remove_from_watchlist
 def index(request):
     active_listings = Listing.objects.filter(is_active=True)
     for listing in active_listings:
-        listing.current_price = get_current_price(listing)  # attach current price to each listing
-    return render(request, "auctions/index.html", {"listings": active_listings})
+        listing.current_price = get_current_price(listing) # attach current price to each listing
 
+    return render(request, "auctions/index.html", {
+        "listings": active_listings,
+    })
+    
 
 def login_view(request):
     if request.method == "POST":
@@ -89,12 +92,13 @@ def create_listing(request):
         form = ListingForm()
     return render(request, "auctions/create_listing.html", {"form": form})
 
+
 @never_cache
 def listing_detail(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
     current_price = Decimal(get_current_price(listing))
     
-    is_watching = False  
+    is_watching = False
     if request.user.is_authenticated:  
         is_watching = Watchlist.objects.filter(user=request.user, listing=listing).exists()  
 
@@ -128,7 +132,7 @@ def listing_detail(request, listing_id):
         "show_message": show_message,
         "message": message,
         "comments": comments,
-        "form": form
+        "form": form,
     })
 
 
@@ -221,3 +225,12 @@ def add_comment(request, listing_id):
             comment.save()
     return redirect('listing_detail', listing_id=listing.id)
 
+
+@login_required
+def watchlist(request):
+    # Trae todos los listings que el usuario tiene en su watchlist
+    listings = Listing.objects.filter(watchlist_entries__user=request.user, is_active=True)
+
+    return render(request, "auctions/watchlist.html", {
+        "listings": listings
+    })
