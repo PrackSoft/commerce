@@ -11,7 +11,7 @@ from decimal import Decimal
 from .forms import ListingForm, CommentForm
 from .models import User, Listing, Watchlist, Bid, Comment
 
-from .utils import current_price, add_to_watchlist, remove_from_watchlist
+from .utils import current_price, add_to_watchlist, remove_from_watchlist, get_listing_context
 
 
 def index(request):
@@ -24,6 +24,7 @@ def index(request):
     return render(request, "auctions/index.html", {
         "listings": active_listings,
     })
+
 
 def login_view(request):
     if request.method == "POST":
@@ -93,98 +94,35 @@ def create_listing(request):
 
     return render(request, "auctions/create_listing.html", {"form": form})
 
-
 @never_cache
 def listing_detail(request, listing_id):
-    # Fetch listing or return 404
     listing = get_object_or_404(Listing, pk=listing_id)
-    current_price_value = current_price(listing)
-
-    # Check if user is watching this listing
-    is_watching = False
-    if request.user.is_authenticated:
-        is_watching = Watchlist.objects.filter(user=request.user, listing=listing).exists()
-
-    # Determine current highest bidder
-    highest_bid = listing.bids.order_by("-amount").first()
-    current_owner = highest_bid.bidder.username if highest_bid else listing.owner.username
-
-    # Prepare auction result message if closed
-    show_message = False
-    message = ""
-    if not listing.is_active and request.user.is_authenticated:
-        if request.user == listing.owner or request.user == listing.winner:
-            show_message = True
-            if listing.winner:
-                message = f"Auction closed. Final price: ${current_price_value} won by {listing.winner.username}."
-            else:
-                message = f"Auction closed. No bids were placed. Starting bid: ${listing.starting_bid}"
-
-    # Fetch comments for the listing
-    comments = Comment.objects.filter(listing=listing).order_by('-id')
-    form = CommentForm()
-    error = request.GET.get("error", "")
-
-    return render(request, "auctions/listing_detail.html", {
-        "listing": listing,
-        "current_price": current_price_value,
-        "is_watching": is_watching,
-        "current_owner": current_owner,
-        "show_message": show_message,
-        "message": message,
-        "comments": comments,
-        "form": form,
-        "error": error,
-    })
+    # Get context including current price and has_bids
+    context = get_listing_context(listing, user=request.user, error=request.GET.get("error", ""))
+    return render(request, "auctions/listing_detail.html", context)
 
 
 @never_cache
 @login_required
 def toggle_watchlist(request, listing_id):
-    # Add or remove listing from user's watchlist
     listing = get_object_or_404(Listing, pk=listing_id)
+    
+    # Toggle watchlist
     if Watchlist.objects.filter(user=request.user, listing=listing).exists():
         remove_from_watchlist(request.user, listing)
     else:
         add_to_watchlist(request.user, listing)
 
-    # Rebuild context like listing_detail
-    current_price_value = current_price(listing)
-    is_watching = Watchlist.objects.filter(user=request.user, listing=listing).exists()
-    highest_bid = listing.bids.order_by("-amount").first()
-    current_owner = highest_bid.bidder.username if highest_bid else listing.owner.username
+    # Build context using utils
+    context = get_listing_context(listing, user=request.user, error="")
 
-    show_message = False
-    message = ""
-    if not listing.is_active:
-        if request.user == listing.owner or request.user == listing.winner:
-            show_message = True
-            if listing.winner:
-                message = f"Auction closed. Final price: ${current_price_value} won by {listing.winner.username}."
-            else:
-                message = f"Auction closed. No bids were placed. Starting bid: ${listing.starting_bid}"
-
-    comments = Comment.objects.filter(listing=listing).order_by('-id')
-    form = CommentForm()
-
-    return render(request, "auctions/listing_detail.html", {
-        "listing": listing,
-        "current_price": current_price_value,
-        "is_watching": is_watching,
-        "current_owner": current_owner,
-        "show_message": show_message,
-        "message": message,
-        "comments": comments,
-        "form": form,
-        "error": "",
-    })
+    return render(request, "auctions/listing_detail.html", context)
 
 
 @never_cache
 @login_required
 def place_bid(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
-    current_price_value = current_price(listing)
     error = ""
 
     if request.method == "POST":
@@ -193,92 +131,41 @@ def place_bid(request, listing_id):
         except (KeyError, ValueError):
             error = "Invalid bid amount."
         else:
-            if bid_amount <= current_price_value:
-                error = f"Your bid must be greater than the current price (${current_price_value})."
+            if bid_amount <= current_price(listing):
+                error = f"Your bid must be greater than the current price (${current_price(listing)})."
             else:
                 # Valid bid: create bid record
                 Bid.objects.create(amount=bid_amount, bidder=request.user, listing=listing)
                 return redirect("listing_detail", listing_id=listing.id)
 
-    # Rebuild context like listing_detail
-    is_watching = Watchlist.objects.filter(user=request.user, listing=listing).exists()
-    highest_bid = listing.bids.order_by("-amount").first()
-    current_owner = highest_bid.bidder.username if highest_bid else listing.owner.username
+    # Build context using utils
+    context = get_listing_context(listing, user=request.user, error=error)
 
-    show_message = False
-    message = ""
-    if not listing.is_active:
-        if request.user == listing.owner or request.user == listing.winner:
-            show_message = True
-            if listing.winner:
-                message = f"Auction closed. Final price: ${current_price_value} won by {listing.winner.username}."
-            else:
-                message = f"Auction closed. No bids were placed. Starting bid: ${listing.starting_bid}"
-
-    comments = Comment.objects.filter(listing=listing).order_by('-id')
-    form = CommentForm()
-
-    return render(request, "auctions/listing_detail.html", {
-        "listing": listing,
-        "current_price": current_price_value,
-        "is_watching": is_watching,
-        "current_owner": current_owner,
-        "show_message": show_message,
-        "message": message,
-        "comments": comments,
-        "form": form,
-        "error": error,
-    })
+    return render(request, "auctions/listing_detail.html", context)
 
 
 @never_cache
 @login_required
 def close_auction(request, listing_id):
-    # Close auction and assign winner if any
     listing = get_object_or_404(Listing, pk=listing_id)
+
     if request.method == "POST" and request.user == listing.owner and listing.is_active:
-        listing.is_active = False
         highest_bid = listing.bids.order_by("-amount").first()
+        listing.is_active = False
         listing.winner = highest_bid.bidder if highest_bid else None
         listing.save()
 
-    # Rebuild context like listing_detail
-    current_price_value = current_price(listing)
-    is_watching = Watchlist.objects.filter(user=request.user, listing=listing).exists()
-    highest_bid = listing.bids.order_by("-amount").first()
-    current_owner = highest_bid.bidder.username if highest_bid else listing.owner.username
+    # Build context using utils
+    context = get_listing_context(listing, user=request.user)
 
-    show_message = False
-    message = ""
-    if not listing.is_active:
-        if request.user == listing.owner or request.user == listing.winner:
-            show_message = True
-            if listing.winner:
-                message = f"Auction closed. Final price: ${current_price_value} won by {listing.winner.username}."
-            else:
-                message = f"Auction closed. No bids were placed. Starting bid: ${listing.starting_bid}"
-
-    comments = Comment.objects.filter(listing=listing).order_by('-id')
-    form = CommentForm()
-
-    return render(request, "auctions/listing_detail.html", {
-        "listing": listing,
-        "current_price": current_price_value,
-        "is_watching": is_watching,
-        "current_owner": current_owner,
-        "show_message": show_message,
-        "message": message,
-        "comments": comments,
-        "form": form,
-        "error": "",
-    })
+    return render(request, "auctions/listing_detail.html", context)
 
 
 @never_cache
 @login_required
 def add_comment(request, listing_id):
-    # Add a comment to a listing
     listing = get_object_or_404(Listing, pk=listing_id)
+
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -287,35 +174,9 @@ def add_comment(request, listing_id):
             comment.listing = listing
             comment.save()
 
-    # Rebuild context like listing_detail
-    current_price_value = current_price(listing)
-    is_watching = Watchlist.objects.filter(user=request.user, listing=listing).exists()
-    highest_bid = listing.bids.order_by("-amount").first()
-    current_owner = highest_bid.bidder.username if highest_bid else listing.owner.username
-
-    show_message = False
-    message = ""
-    if not listing.is_active:
-        if request.user == listing.owner or request.user == listing.winner:
-            show_message = True
-            if listing.winner:
-                message = f"Auction closed. Final price: ${current_price_value} won by {listing.winner.username}."
-            else:
-                message = f"Auction closed. No bids were placed. Starting bid: ${listing.starting_bid}"
-
-    comments = Comment.objects.filter(listing=listing).order_by('-id')
-    form = CommentForm()
-
-    return render(request, "auctions/listing_detail.html", {
-        "listing": listing,
-        "current_price": current_price_value,
-        "is_watching": is_watching,
-        "current_owner": current_owner,
-        "show_message": show_message,
-        "message": message,
-        "comments": comments,
-        "form": form,
-    })
+    # Build context using utils
+    context = get_listing_context(listing, user=request.user)
+    return render(request, "auctions/listing_detail.html", context)
 
 
 @login_required

@@ -7,7 +7,13 @@
     <h3>{{ listing.title }}</h3>
     <p>Seller: {{ listing.owner }}</p>
     <p>{{ listing.description }}</p>
-    <p>Current price: ${{ current_price_value }} by {{ current_owner }}</p>
+    <p>
+        {% if has_bids %}
+            <p>Current price: ${{ current_price }} by {{ current_owner }}</p>
+        {% else %}
+            <p>Starting price: ${{ listing.starting_bid }}</p>
+        {% endif %}
+    </p>
     {% if listing.image_url %}  <!-- Conditionally renders the listing image only if a URL is provided, preventing broken images. -->
         <img src="{{ listing.image_url }}" alt="{{ listing.title }}">
     {% endif %}
