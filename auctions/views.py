@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.decorators.cache import never_cache
@@ -11,20 +11,19 @@ from decimal import Decimal
 from .forms import ListingForm, CommentForm
 from .models import User, Listing, Watchlist, Bid, Comment
 
-from .utils import get_current_price, add_to_watchlist, remove_from_watchlist
+from .utils import current_price, add_to_watchlist, remove_from_watchlist
 
 
 def index(request):
     # Fetch all active listings
     active_listings = Listing.objects.filter(is_active=True)
-    for listing in active_listings:
-        # Attach dynamic current price to each listing
-        listing.current_price = get_current_price(listing)
+    
+    # Attach dynamic current price to each listing
+    current_price(active_listings)
 
     return render(request, "auctions/index.html", {
         "listings": active_listings,
     })
-
 
 def login_view(request):
     if request.method == "POST":
@@ -99,7 +98,7 @@ def create_listing(request):
 def listing_detail(request, listing_id):
     # Fetch listing or return 404
     listing = get_object_or_404(Listing, pk=listing_id)
-    current_price = Decimal(get_current_price(listing))
+    current_price_value = current_price(listing)
 
     # Check if user is watching this listing
     is_watching = False
@@ -117,7 +116,7 @@ def listing_detail(request, listing_id):
         if request.user == listing.owner or request.user == listing.winner:
             show_message = True
             if listing.winner:
-                message = f"Auction closed. Final price: ${current_price} won by {listing.winner.username}."
+                message = f"Auction closed. Final price: ${current_price_value} won by {listing.winner.username}."
             else:
                 message = f"Auction closed. No bids were placed. Starting bid: ${listing.starting_bid}"
 
@@ -128,7 +127,7 @@ def listing_detail(request, listing_id):
 
     return render(request, "auctions/listing_detail.html", {
         "listing": listing,
-        "current_price": current_price,
+        "current_price": current_price_value,
         "is_watching": is_watching,
         "current_owner": current_owner,
         "show_message": show_message,
@@ -150,7 +149,7 @@ def toggle_watchlist(request, listing_id):
         add_to_watchlist(request.user, listing)
 
     # Rebuild context like listing_detail
-    current_price = Decimal(get_current_price(listing))
+    current_price_value = current_price(listing)
     is_watching = Watchlist.objects.filter(user=request.user, listing=listing).exists()
     highest_bid = listing.bids.order_by("-amount").first()
     current_owner = highest_bid.bidder.username if highest_bid else listing.owner.username
@@ -161,7 +160,7 @@ def toggle_watchlist(request, listing_id):
         if request.user == listing.owner or request.user == listing.winner:
             show_message = True
             if listing.winner:
-                message = f"Auction closed. Final price: ${current_price} won by {listing.winner.username}."
+                message = f"Auction closed. Final price: ${current_price_value} won by {listing.winner.username}."
             else:
                 message = f"Auction closed. No bids were placed. Starting bid: ${listing.starting_bid}"
 
@@ -170,7 +169,7 @@ def toggle_watchlist(request, listing_id):
 
     return render(request, "auctions/listing_detail.html", {
         "listing": listing,
-        "current_price": current_price,
+        "current_price": current_price_value,
         "is_watching": is_watching,
         "current_owner": current_owner,
         "show_message": show_message,
@@ -185,7 +184,7 @@ def toggle_watchlist(request, listing_id):
 @login_required
 def place_bid(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
-    current_price = Decimal(get_current_price(listing))
+    current_price_value = current_price(listing)
     error = ""
 
     if request.method == "POST":
@@ -194,8 +193,8 @@ def place_bid(request, listing_id):
         except (KeyError, ValueError):
             error = "Invalid bid amount."
         else:
-            if bid_amount <= current_price:
-                error = f"Your bid must be greater than the current price (${current_price})."
+            if bid_amount <= current_price_value:
+                error = f"Your bid must be greater than the current price (${current_price_value})."
             else:
                 # Valid bid: create bid record
                 Bid.objects.create(amount=bid_amount, bidder=request.user, listing=listing)
@@ -212,7 +211,7 @@ def place_bid(request, listing_id):
         if request.user == listing.owner or request.user == listing.winner:
             show_message = True
             if listing.winner:
-                message = f"Auction closed. Final price: ${current_price} won by {listing.winner.username}."
+                message = f"Auction closed. Final price: ${current_price_value} won by {listing.winner.username}."
             else:
                 message = f"Auction closed. No bids were placed. Starting bid: ${listing.starting_bid}"
 
@@ -221,7 +220,7 @@ def place_bid(request, listing_id):
 
     return render(request, "auctions/listing_detail.html", {
         "listing": listing,
-        "current_price": current_price,
+        "current_price": current_price_value,
         "is_watching": is_watching,
         "current_owner": current_owner,
         "show_message": show_message,
@@ -244,7 +243,7 @@ def close_auction(request, listing_id):
         listing.save()
 
     # Rebuild context like listing_detail
-    current_price = Decimal(get_current_price(listing))
+    current_price_value = current_price(listing)
     is_watching = Watchlist.objects.filter(user=request.user, listing=listing).exists()
     highest_bid = listing.bids.order_by("-amount").first()
     current_owner = highest_bid.bidder.username if highest_bid else listing.owner.username
@@ -255,7 +254,7 @@ def close_auction(request, listing_id):
         if request.user == listing.owner or request.user == listing.winner:
             show_message = True
             if listing.winner:
-                message = f"Auction closed. Final price: ${current_price} won by {listing.winner.username}."
+                message = f"Auction closed. Final price: ${current_price_value} won by {listing.winner.username}."
             else:
                 message = f"Auction closed. No bids were placed. Starting bid: ${listing.starting_bid}"
 
@@ -264,7 +263,7 @@ def close_auction(request, listing_id):
 
     return render(request, "auctions/listing_detail.html", {
         "listing": listing,
-        "current_price": current_price,
+        "current_price": current_price_value,
         "is_watching": is_watching,
         "current_owner": current_owner,
         "show_message": show_message,
@@ -289,7 +288,7 @@ def add_comment(request, listing_id):
             comment.save()
 
     # Rebuild context like listing_detail
-    current_price = Decimal(get_current_price(listing))
+    current_price_value = current_price(listing)
     is_watching = Watchlist.objects.filter(user=request.user, listing=listing).exists()
     highest_bid = listing.bids.order_by("-amount").first()
     current_owner = highest_bid.bidder.username if highest_bid else listing.owner.username
@@ -300,7 +299,7 @@ def add_comment(request, listing_id):
         if request.user == listing.owner or request.user == listing.winner:
             show_message = True
             if listing.winner:
-                message = f"Auction closed. Final price: ${current_price} won by {listing.winner.username}."
+                message = f"Auction closed. Final price: ${current_price_value} won by {listing.winner.username}."
             else:
                 message = f"Auction closed. No bids were placed. Starting bid: ${listing.starting_bid}"
 
@@ -309,7 +308,7 @@ def add_comment(request, listing_id):
 
     return render(request, "auctions/listing_detail.html", {
         "listing": listing,
-        "current_price": current_price,
+        "current_price": current_price_value,
         "is_watching": is_watching,
         "current_owner": current_owner,
         "show_message": show_message,
@@ -323,8 +322,9 @@ def add_comment(request, listing_id):
 def watchlist(request):
     # Fetch all active listings in user's watchlist
     listings = Listing.objects.filter(watchlist_entries__user=request.user, is_active=True)
-    for listing in listings:
-        listing.current_price = get_current_price(listing)  # attach current price
+    
+    # Attach dynamic current price to each listing
+    current_price(listings)
 
     return render(request, "auctions/watchlist.html", {
         "listings": listings
@@ -371,8 +371,7 @@ def my_purchases(request):
                 visible_listings.append(listing)
 
     # Attach current price to each listing
-    for listing in visible_listings:
-        listing.current_price = get_current_price(listing)
+    current_price(visible_listings)
 
     return render(request, "auctions/my_purchases.html", {
         "listings": visible_listings
@@ -383,14 +382,9 @@ def my_purchases(request):
 def my_listings(request):
     # Fetch all listings created by the current user (both active and inactive)
     listings = Listing.objects.filter(owner=request.user).order_by('-id')
-
-    # Attach a safe current_price to each listing to avoid template errors
-    for listing in listings:
-        try:
-            listing.current_price = Decimal(get_current_price(listing))
-        except Exception:
-            # Fallback to starting_bid if price calculation fails
-            listing.current_price = listing.starting_bid
+    
+    # Attach current price to each listing
+    current_price(listings)
 
     return render(request, "auctions/my_listings.html", {
         "listings": listings

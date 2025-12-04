@@ -5,7 +5,7 @@
     {% for listing in listings %}                                                   <!-- Iterates over all listings in the watchlist, dynamically generating links to their detail pages. -->
         <a href="{% url 'listing_detail' listing.id %}">
             <div class="listings">                                                  <!-- Wraps each listing in a <div> with class listings for consistent styling and layout. -->
-                <!-- Shows key information for each listing: title, description, and current price. -->
+                                                                                    <!-- Shows key information for each listing: title, description, and current price. -->
                 <h3>{{ listing.title }}</h3>
                 <p>Seller: {{ listing.owner }}</p>
                 <p>{{ listing.description }}</p>

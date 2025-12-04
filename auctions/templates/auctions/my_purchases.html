@@ -1,11 +1,11 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>My Purchases</h2>                                                       <!-- Displays the user’s purchase history with a clear header. -->
+    <h2>My Purchases</h2>                                                           <!-- Displays the user’s purchase history with a clear header. -->
     {% for listing in listings %}                                                   <!-- Iterates over all listings the user has won. -->
         <a href="{% url 'listing_detail' listing.id %}">
             <div class="listings">                                                  <!-- Wraps each listing in a <div> for consistent styling. -->
-                <!-- Shows key information: title, seller, description, and final price. -->
+                                                                                    <!-- Shows key information: title, seller, description, and final price. -->
                 <h3>{{ listing.title }}</h3>
                 <p>{{ listing.description }}</p>
                 <p>Current price: ${{ listing.current_price }}</p>

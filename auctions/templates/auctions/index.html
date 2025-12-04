@@ -4,7 +4,7 @@
     <h2>Active Listings</h2>
     {% for listing in listings %} <!-- Iterates over all active listings, dynamically generating content for each. -->
         <a href="{% url 'listing_detail' listing.id %}"> <!-- Wraps each listing in a link to its detail page, improving navigation and usability. -->
-            <div class="listing-item">
+            <div class="listings">
                 <!-- Organizes listing content with semantic HTML (<h3> for title, <p> for description and price) for accessibility and SEO. -->
                 <h3>{{ listing.title }}</h3>
                 <p>{{ listing.description }}</p>
