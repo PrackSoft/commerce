@@ -8,3 +8,21 @@ body {
     width: 100%;
     box-sizing: border-box;
 }
+
+.listings {
+    border: 2px solid red; /* Cambia rojo por el color que quieras */
+    padding: 10px;          /* Para que el contenido no quede pegado al borde */
+    margin-bottom: 10px;
+}
+
+.listing-item {
+    border: 2px solid purple; /* Cambia rojo por el color que quieras */
+    padding: 10px;          /* Para que el contenido no quede pegado al borde */
+    margin-bottom: 10px;
+}
+
+.category-item {
+    border: 2px solid green; /* Cambia rojo por el color que quieras */
+    padding: 10px;          /* Para que el contenido no quede pegado al borde */
+    margin-bottom: 10px;
+}

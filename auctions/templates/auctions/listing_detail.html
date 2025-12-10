@@ -19,10 +19,17 @@
     {% endif %}
 
     {% if request.user.is_authenticated and request.user == listing.owner and listing.is_active %} <!-- Allows the listing owner to close the auction when active, using a CSRF-protected form for security. -->
-    <form action="{% url 'close_auction' listing.id %}" method="post">
-        {% csrf_token %}
-        <button type="submit">Close Auction</button>
-    </form>
+        <form action="{% url 'close_auction' listing.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Close Auction</button>
+        </form>
+    {% endif %}
+    {% if request.user.is_authenticated and request.user == listing.owner and not listing.is_active %} <!-- Allows the listing owner to close the auction when active, using a CSRF-protected form for security. -->
+        <form action="{% url 'remove_listing_from_mode' listing.id %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="mode" value="{{ mode }}">
+            <button type="submit">Remove from My Listings</button>
+        </form>
     {% endif %}
 
     {% if show_message %}
@@ -47,7 +54,7 @@
         {% endif %}
     {% endif %}
 
-    {% if request.user.is_authenticated %}  <!-- Allows authenticated users to submit comments and displays all existing comments dynamically. -->
+    {% if request.user.is_authenticated and listing.is_active %}  <!-- Allows authenticated users to submit comments and displays all existing comments dynamically. -->
         <form method="post" action="{% url 'add_comment' listing.id %}">
             {% csrf_token %}
             {{ form.text }}

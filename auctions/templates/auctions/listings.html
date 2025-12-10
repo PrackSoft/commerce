@@ -1,0 +1,69 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    {% if mode == "category" %}
+        <h2>Listings in "{{ category_name }}"</h2>
+    {% elif mode == "watchlist" %}
+        <h2>My Watchlist</h2>
+    {% elif mode == "my_listings" %}
+        <h2>My Listings</h2>
+    {% elif mode == "my_purchases" %}
+        <h2>My Purchases</h2>
+    {% endif %}
+
+    {% if listings|length == 0 %}
+        {% if mode == "watchlist" %}
+            <p>You have no items in your watchlist.</p>
+        {% elif mode == "my_purchases" %}
+            <p>You have not purchased or bid on any listings.</p>
+        {% elif mode == "my_listings" %}
+            <p>You have not created any listings.</p>
+        {% endif %}
+    {% endif %}
+
+    {% for listing in listings %}
+    <a href="{% url 'listing_detail' listing.id %}">
+        <div class="listing-item">
+        <h3>{{ listing.title }}</h3>
+
+            {% if listing.status_message %}
+                <p>{{ listing.status_message }}</p>
+            {% else %}
+                {% if listing.is_active %}
+                    <p>Current price: ${{ listing.current_price }}</p>
+                {% else %}
+                    {% if mode == "my_listings" %}
+                        <p>Status: Closed</p>
+                    {% else %}
+                        <p>Current price: ${{ listing.current_price }}</p>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+
+            {% if mode != "category" %}
+                <p>{{ listing.description }}</p>
+            {% endif %}
+
+            {% if listing.image_url %}
+                <img src="{{ listing.image_url }}" alt="{{ listing.title }}">
+            {% endif %}
+
+            {% if mode in "my_purchases watchlist" %}
+                <form action="{% url 'remove_listing_from_mode' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="mode" value="{{ mode }}">
+                    <button type="submit">Remove from 
+                    {% if mode == "my_purchases" %}
+                        My Purchases
+                    {% elif mode == "watchlist" %}
+                        Watchlist
+                    {% endif %}
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+    </a>
+    {% endfor %}
+
+{% endblock %}

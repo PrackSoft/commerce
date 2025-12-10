@@ -9,7 +9,7 @@ from django.views.decorators.cache import never_cache
 from decimal import Decimal
 
 from .forms import ListingForm, CommentForm
-from .models import User, Listing, Watchlist, Bid, Comment
+from .models import User, Listing, Watchlist, Bid, Comment, RemovedPurchase
 
 from .utils import current_price, add_to_watchlist, remove_from_watchlist, get_listing_context
 
@@ -131,12 +131,21 @@ def place_bid(request, listing_id):
         except (KeyError, ValueError):
             error = "Invalid bid amount."
         else:
-            if bid_amount <= current_price(listing):
-                error = f"Your bid must be greater than the current price (${current_price(listing)})."
+            current_amount, has_bids = current_price(listing)
+
+            if has_bids:
+                if bid_amount <= current_amount:
+                    error = f"Your bid must be greater than the current price (${current_amount})."
+                else:
+                    Bid.objects.create(amount=bid_amount, bidder=request.user, listing=listing)
+                    return redirect("listing_detail", listing_id=listing.id)
             else:
-                # Valid bid: create bid record
-                Bid.objects.create(amount=bid_amount, bidder=request.user, listing=listing)
-                return redirect("listing_detail", listing_id=listing.id)
+                if bid_amount < current_amount:
+                    error = f"Your bid must be at least the starting price (${current_amount})."
+                else:
+                    Bid.objects.create(amount=bid_amount, bidder=request.user, listing=listing)
+                    return redirect("listing_detail", listing_id=listing.id)
+
 
     # Build context using utils
     context = get_listing_context(listing, user=request.user, error=error)
@@ -180,29 +189,6 @@ def add_comment(request, listing_id):
 
 
 @login_required
-def watchlist(request):
-    # Fetch all active listings in user's watchlist
-    listings = Listing.objects.filter(watchlist_entries__user=request.user, is_active=True)
-    
-    # Attach dynamic current price to each listing
-    current_price(listings)
-
-    return render(request, "auctions/watchlist.html", {
-        "listings": listings
-    })
-
-
-@login_required
-def category_listings(request, category_name):
-    # Fetch all active listings in a specific category
-    listings = Listing.objects.filter(is_active=True, category=category_name)
-    return render(request, "auctions/category_listings.html", {
-        "category_name": category_name,
-        "listings": listings
-    })
-
-
-@login_required
 def categories_view(request):
     # Fetch all unique categories with active listings
     listings = Listing.objects.filter(is_active=True)
@@ -212,41 +198,72 @@ def categories_view(request):
         "categories": categories
     })
 
-
 @login_required
-def my_purchases(request):
-    # Fetch all listings where user placed a bid
-    bids = Bid.objects.filter(bidder=request.user).select_related('listing')
-    listings = {bid.listing for bid in bids}  # Remove duplicates
+def unified_listings(request, mode, category_name=None):
+    listings = []
 
-    # Filter listings
-    visible_listings = []
-    for listing in listings:
-        if listing.owner == request.user:
-            continue  # Owner never sees their own listings
-        if listing.is_active:
-            visible_listings.append(listing)
-        else:
-            # Show inactive only if user is winner
-            if listing.winner == request.user:
-                visible_listings.append(listing)
+    if mode == "watchlist":
+        listings = Listing.objects.filter(
+            watchlist_entries__user=request.user
+        ).order_by('-id')
 
-    # Attach current price to each listing
-    current_price(visible_listings)
+    elif mode == "my_listings":
+        listings = Listing.objects.filter(owner=request.user).order_by('-id')
 
-    return render(request, "auctions/my_purchases.html", {
-        "listings": visible_listings
-    })
+    elif mode == "my_purchases":
+        bids = Bid.objects.filter(bidder=request.user).select_related('listing')
+        listings_set = {bid.listing for bid in bids}
 
+        removed = RemovedPurchase.objects.filter(user=request.user).values_list('listing_id', flat=True)
 
-@login_required
-def my_listings(request):
-    # Fetch all listings created by the current user (both active and inactive)
-    listings = Listing.objects.filter(owner=request.user).order_by('-id')
-    
-    # Attach current price to each listing
+        listings = []
+        for listing in listings_set:
+            if listing.id in removed:
+                continue
+            if listing.owner == request.user:
+                continue
+            listings.append(listing)
+
+    elif mode == "category":
+        listings = Listing.objects.filter(is_active=True, category=category_name)
+
     current_price(listings)
 
-    return render(request, "auctions/my_listings.html", {
-        "listings": listings
+    for listing in listings:
+        if mode in ["my_purchases", "watchlist"]:
+            if listing.is_active:
+                listing.status_message = f"Current price: ${listing.current_price}"
+            else:
+                if listing.winner == request.user:
+                    listing.status_message = "YOU WON!"
+                else:
+                    listing.status_message = "YOU DID NOT WIN"
+        elif mode == "my_listings":
+            listing.status_message = "Active" if listing.is_active else "Closed"
+        else:
+            listing.status_message = ""
+
+    return render(request, "auctions/listings.html", {
+        "listings": listings,
+        "mode": mode,
+        "category_name": category_name,
     })
+
+
+@login_required
+def remove_listing_from_mode(request, listing_id):
+    mode = request.POST.get("mode")
+    listing = Listing.objects.get(pk=listing_id)
+
+    if mode == "watchlist":
+        Watchlist.objects.filter(user=request.user, listing=listing).delete()
+
+    elif mode == "my_purchases":
+        RemovedPurchase.objects.get_or_create(user=request.user, listing=listing)
+
+    if mode == "watchlist":
+        return redirect("watchlist")
+    elif mode == "my_listings":
+        return redirect("my_listings")
+    elif mode == "my_purchases":
+        return redirect("my_purchases")
