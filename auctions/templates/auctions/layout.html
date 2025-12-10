@@ -3,49 +3,52 @@
 <!DOCTYPE html>
 <html lang="en"> <!-- Marks the start of the HTML document and sets the language for accessibility and SEO.-->
     <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap" rel="stylesheet"> 
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  <!-- Ensures the page scales correctly on mobile devices, enabling CSS/Bootstrap's responsive design features -->
         <title>{% block title %}Auctions{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> <!-- Links external Bootstrap CSS to provide consistent styling and layout components.-->
         <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">   <!-- Loads the app’s custom static stylesheet for additional design customizations. -->
     </head>
-    <body>
+    <body class="centered">
         <h1>Auctions</h1>
         <div>
             {% if user.is_authenticated %} <!-- Displays the current authentication state of the user, enhancing usability by showing who is signed in. -->
-                Signed in as <strong>{{ user.username }}</strong>.
+                Hello <strong>{{ user.username }}!</strong>.
             {% else %}
                 Not signed in.
             {% endif %}
         </div>
         <ul class="nav">
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+                <a class="nav-link" href="{% url 'index' %}"><img src="{% static 'auctions/icons/apps_33dp_1F1F1F.svg' %}" alt="Active Listings"></a>
             </li>
             {% if request.user.is_authenticated %}  <!-- Uses a navigation bar that adapts links based on whether the user is logged in, improving user experience.-->
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'create_listing' %}">Create Listing</a>
+                    <a class="nav-link" href="{% url 'create_listing' %}"><img src="{% static 'auctions/icons/add_33dp_1F1F1F.svg' %}" alt="Create Listing"></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'my_listings' %}">My Listings</a>
+                    <a class="nav-link" href="{% url 'my_listings' %}"><img src="{% static 'auctions/icons/storefront_33dp_1F1F1F.svg' %}" alt="My Listings"></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'categories' %}">Categories</a>
+                    <a class="nav-link" href="{% url 'categories' %}"><img src="{% static 'auctions/icons/category_33dp_1F1F1F.svg' %}" alt="Categories"></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'my_purchases' %}">My Purchases</a>
+                    <a class="nav-link" href="{% url 'my_purchases' %}"><img src="{% static 'auctions/icons/shopping_bag_33dp_1F1F1F.svg' %}" alt="My Purchases"></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
+                    <a class="nav-link" href="{% url 'watchlist' %}"><img src="{% static 'auctions/icons/visibility_33dp_1F1F1F.svg' %}" alt="Watchlist"></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                    <a class="nav-link" href="{% url 'logout' %}"><img src="{% static 'auctions/icons/logout_33dp_1F1F1F.svg' %}" alt="Log Out"></a>
                 </li>
             {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                    <a class="nav-link" href="{% url 'login' %}"><img src="{% static 'auctions/icons/fingerprint_33dp_1F1F1F.svg' %}" alt="Log In"></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    <a class="nav-link" href="{% url 'register' %}"><img src="{% static 'auctions/icons/person_add_alt_33dp_1F1F1F.svg' %}" alt="Register"></a>
                 </li>
             {% endif %}
         </ul>

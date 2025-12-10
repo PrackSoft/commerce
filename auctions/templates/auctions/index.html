@@ -1,26 +1,26 @@
-{% extends "auctions/layout.html" %} <!-- Extends the base layout to maintain consistent structure and navigation across pages. -->
+{% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
-    {% for listing in listings %} <!-- Iterates over all active listings, dynamically generating content for each. -->
-        <a href="{% url 'listing_detail' listing.id %}"> <!-- Wraps each listing in a link to its detail page, improving navigation and usability. -->
-            <div class="listings">
-                <!-- Organizes listing content with semantic HTML (<h3> for title, <p> for description and price) for accessibility and SEO. -->
-                <h3>{{ listing.title }}</h3>
-                <p>{{ listing.description }}</p>
-                <p>
-                    {% if listing.has_bids %}
-                        Current price: ${{ listing.current_price }}
-                    {% else %}
-                        Starting price: ${{ listing.starting_bid }}
-                    {% endif %}
-                </p>
-                {% if listing.image_url %} <!-- Conditionally displays an image only if the listing provides a URL, preventing broken image links. -->
-                    <img src="{{ listing.image_url }}" alt="{{ listing.title }}">
+<div class="listings-grid">
+    {% for listing in listings %}
+    <a href="{% url 'listing_detail' listing.id %}" class="listing-link">
+        <div class="listings">
+            <h3>{{ listing.title }}</h3>
+            <p>{{ listing.description }}</p>
+            <p>
+                {% if listing.has_bids %}
+                    Current price: ${{ listing.current_price }}
+                {% else %}
+                    Starting price: ${{ listing.starting_bid }}
                 {% endif %}
-            </div>
-        </a>
-    {% empty %} <!-- Handles the case of no active listings gracefully with the empty-block.-->
+            </p>
+            {% if listing.image_url %}
+                <img src="{{ listing.image_url }}" alt="{{ listing.title }}">
+            {% endif %}
+        </div>
+    </a>
+    {% empty %}
         <p>No active listings at the moment.</p>
     {% endfor %}
+</div>
 {% endblock %}

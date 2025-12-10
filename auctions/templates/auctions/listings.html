@@ -2,30 +2,21 @@
 
 {% block body %}
 
-    {% if mode == "category" %}
-        <h2>Listings in "{{ category_name }}"</h2>
-    {% elif mode == "watchlist" %}
-        <h2>My Watchlist</h2>
-    {% elif mode == "my_listings" %}
-        <h2>My Listings</h2>
+{% if listings|length == 0 %}
+    {% if mode == "watchlist" %}
+        <p>You have no items in your watchlist.</p>
     {% elif mode == "my_purchases" %}
-        <h2>My Purchases</h2>
+        <p>You have not purchased or bid on any listings.</p>
+    {% elif mode == "my_listings" %}
+        <p>You have not created any listings.</p>
     {% endif %}
+{% endif %}
 
-    {% if listings|length == 0 %}
-        {% if mode == "watchlist" %}
-            <p>You have no items in your watchlist.</p>
-        {% elif mode == "my_purchases" %}
-            <p>You have not purchased or bid on any listings.</p>
-        {% elif mode == "my_listings" %}
-            <p>You have not created any listings.</p>
-        {% endif %}
-    {% endif %}
-
-    {% for listing in listings %}
-    <a href="{% url 'listing_detail' listing.id %}">
+<div class="listings-grid">
+{% for listing in listings %}
+    <a href="{% url 'listing_detail' listing.id %}" class="listing-link">
         <div class="listing-item">
-        <h3>{{ listing.title }}</h3>
+            <h3>{{ listing.title }}</h3>
 
             {% if listing.status_message %}
                 <p>{{ listing.status_message }}</p>
@@ -46,7 +37,7 @@
             {% endif %}
 
             {% if listing.image_url %}
-                <img src="{{ listing.image_url }}" alt="{{ listing.title }}">
+                <img src="{{ listing.image_url }}" alt="{{ listing.title }}" class="listing-picture">
             {% endif %}
 
             {% if mode in "my_purchases watchlist" %}
@@ -64,6 +55,7 @@
             {% endif %}
         </div>
     </a>
-    {% endfor %}
+{% endfor %}
+</div>
 
 {% endblock %}
