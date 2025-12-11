@@ -16,7 +16,7 @@ CATEGORY_CHOICES = [
 
 
 class Listing(models.Model):
-    title = models.CharField(max_length=24)
+    title = models.CharField(max_length=100)
     description = models.TextField(max_length=240)
     starting_bid = models.DecimalField(max_digits=10, decimal_places=2)
     image_url = models.URLField(blank=True, null=True)

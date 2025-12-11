@@ -1,17 +1,17 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<div class="listings-grid">
+<div class="index-listings-grid">
     {% for listing in listings %}
-    <a href="{% url 'listing_detail' listing.id %}" class="listing-link">
-        <div class="listings">
-            <h3 class="alumni-sans-pinstripe-regular">{{ listing.title }}</h3>
-            <p>{{ listing.description }}</p>
-            <p>
+    <a class="index-listings-link" href="{% url 'listing_detail' listing.id %}">
+        <div class="index-listings">
+            <h5 class="index-listings-title">{{ listing.title }}</h5>
+            <p class="index-lisitngs-description">{{ listing.description }}</p>
+            <p class="listing-price">
                 {% if listing.has_bids %}
-                    Current price: ${{ listing.current_price }}
+                    Now: ${{ listing.current_price }}
                 {% else %}
-                    Starting price: ${{ listing.starting_bid }}
+                    From: ${{ listing.starting_bid }}
                 {% endif %}
             </p>
             {% if listing.image_url %}
