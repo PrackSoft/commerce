@@ -1,65 +1,156 @@
-body h1 {
-  font-family: "Major Mono Display", monospace;
-  font-size: 5rem;
-  font-weight: 900;
-  font-style: normal;
+/* Reset global */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: 0;
+    outline: 0;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+html, body {
+    width: 100vw;   /* 100% del ancho de la ventana */
+    height: 100vh;  /* 100% del alto de la ventana */
 }
 
 body {
-    padding: 10px;
+    line-height: 1;
 }
 
-.centered {
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+ol, ul {
+    list-style: none;
 }
 
-
-/* My styles */
-.full-width {
-    width: 100%;
-    box-sizing: border-box;
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
-.listings {
-    border: .4rem solid red;
-    height: 36rem;
-    width: 29rem;
-    padding: 10px;          /* Para que el contenido no quede pegado al borde */
-    margin-bottom: 10px;
-}
-
-
-
-
-.category-item {
-    border: 2px solid green; /* Cambia rojo por el color que quieras */
-    padding: 10px;          /* Para que el contenido no quede pegado al borde */
-    margin-bottom: 10px;
-}
-
-.listings-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Tres columnas fijas */
-    gap: 1rem;
-}
-
-a.listing-link {
-    display: block;
+a {
     text-decoration: none;
     color: inherit;
 }
 
-.listings {
-    border: 1px solid black;
-    padding: 1rem;
-    border-radius: 8px;
-    background-color: #fff;
+img, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+---
+
+/* BODY GENERAL */
+body {
+    display: flex;
+    flex-direction: column;
+    
+    border: 0px solid purple;
 }
 
+/* HEADER GRID 3 COLUMNAS*/
+header {
+    display: flex;
+    flex-direction: column; /* apilar elementos */
+    justify-content: center; /* centrar vertical */
+    align-items: center;     /* centrar horizontal */
+    height: 33.333vw;
+    margin: 15px;
+
+    border: 0px solid green;
+}
+
+header .header-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* centra hijos verticalmente dentro de wrapper */
+    align-items: center;     /* centra hijos horizontalmente */
+    height: 100%;
+    width: 100%;
+    padding: 15px;
+    border-radius: 4px;
+    color: #800080;
+    background-color: lightpink;
+    border: 0 solid lightcoral;
+}
+
+
+
+header h1 {
+    font-family: "Major Mono Display", monospace;
+    font-size: 5.333vw;
+    font-weight: 900;
+    margin: 0 0 0 0;
+}
+
+.user-greeting {
+    background-color: #800080;
+    text-align: center;
+    width: 100%;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    margin: 0 0;
+    font-size: 1.333vw;
+}
+
+.nav {
+    display: flex;
+    flex-wrap:nowrap;
+    width: 33.333vw;
+    justify-content: center;
+    color: #800080;
+    list-style: none;
+    padding: 0 -20px;
+    margin: 0;
+    border: 0px solid red;
+}
+
+.nav-item {
+    margin: 0 0;
+}
+
+.nav-link img {
+    display: block;
+    width: 2.666vw;
+    height: 2.666vw;
+}
+
+/* GRID RESPONSIVO HEADER */
+@media (max-width: 992px) {
+    header {
+        grid-template-columns: 1fr auto; /* 2 columnas */
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        grid-template-columns: 1fr; /* 1 columna */
+    }
+}
+
+
+/* LISTINGS GRID */
+
+.listings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+    margin: 15px;
+    box-sizing: border-box;
+
+    border: 0px solid green;
+}
+
+.listings {
+    width: auto;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    border: 0px solid black;
+    border-radius: 4px;
+    background-color: antiquewhite;
+    padding: 15px;
+}
 .listings img {
     width: 100%;
     height: 20rem;
@@ -68,16 +159,16 @@ a.listing-link {
     margin-bottom: 0.5rem;
 }
 
-
-
+/* GRID RESPONSIVO LISTINGS */
 @media (max-width: 992px) {
     .listings-grid {
-        grid-template-columns: repeat(2, 1fr); /* Dos columnas en tablet */
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 768px) {
     .listings-grid {
-        grid-template-columns: 1fr; /* Una columna en móvil */
+        grid-template-columns: 1fr;
     }
 }
+
