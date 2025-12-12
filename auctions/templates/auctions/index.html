@@ -5,18 +5,20 @@
     {% for listing in listings %}
     <a class="index-listings-link" href="{% url 'listing_detail' listing.id %}">
         <div class="index-listings">
+            {% if listing.image_url %}
+                <img src="{{ listing.image_url }}" alt="{{ listing.title }}">
+            {% endif %}
             <h5 class="index-listings-title">{{ listing.title }}</h5>
-            <p class="index-lisitngs-description">{{ listing.description }}</p>
-            <p class="listing-price">
+            <div class="index-listings-description">
+                <p class="clase-justificada">{{ listing.description }}</p>
+            </div>
+            <h5 class="listing-price">
                 {% if listing.has_bids %}
                     Now: ${{ listing.current_price }}
                 {% else %}
                     From: ${{ listing.starting_bid }}
                 {% endif %}
-            </p>
-            {% if listing.image_url %}
-                <img src="{{ listing.image_url }}" alt="{{ listing.title }}">
-            {% endif %}
+            </h5>
         </div>
     </a>
     {% empty %}
@@ -24,3 +26,4 @@
     {% endfor %}
 </div>
 {% endblock %}
+

@@ -12,6 +12,7 @@
 html, body {
     width: 100vw;   /* 100% del ancho de la ventana */
     height: 100vh;  /* 100% del alto de la ventana */
+    background: white;
 }
 
 body {
@@ -49,34 +50,29 @@ body {
 /* HEADER GRID 3 COLUMNAS*/
 header {
     display: flex;
-    flex-direction: column; /* apilar elementos */
-    justify-content: center; /* centrar vertical */
-    align-items: center;     /* centrar horizontal */
-    height: 33.333vw;
-    margin: 15px;
-
-    border: 0px solid green;
-}
-
-header .header-wrapper {
-    display: flex;
     flex-direction: column;
-    justify-content: center; /* centra hijos verticalmente dentro de wrapper */
-    align-items: center;     /* centra hijos horizontalmente */
-    height: 100%;
-    width: 100%;
-    padding: 15px;
-    border-radius: 4px;
-    color: #800080;
+    justify-content: center;
+    align-items: center;
+    height: calc(33.333vw - 3.333vw);
+    margin: 0;
+    border-radius: 0.25rem;
     background-color: lightpink;
-    border: 0 solid lightcoral;
+    padding: 30px;
+
+    border: 0px solid red;
 }
+
 
 header h1 {
+    text-align: center;
     font-family: "Major Mono Display", monospace;
-    font-size: 5.333vw;
+    font-size: 5.666vw;
     font-weight: 900;
-    margin: 0 0 0 0;
+    width: 33.333vw;
+    height: auto;
+    margin: 0;
+
+    border: 0px solid orange;
 }
 
 .user-greeting {
@@ -86,25 +82,24 @@ header h1 {
     color: white;
     padding: 0.5rem;
     border-radius: 0.25rem;
-    margin: 0 0;
+    margin: 0;
     font-size: 1.333vw;
 }
 
 .nav {
     display: flex;
-    flex-wrap:nowrap;
+    flex-wrap: nowrap;
     width: 33.333vw;
-    justify-content: center;
-    color: #800080;
+    justify-content: space-between;
     list-style: none;
-    padding: 0 -20px;
-    margin: 0;
-    border: 0px solid red;
+
+    border: 0px solid orange;
 }
 
 .nav-item {
-
-    margin: 0 0;
+    display: flex;        /* opcional si los ítems tienen más contenido */
+    justify-content: center; /* centra el icono dentro del li */
+    flex: none;           /* NO expandir cada li */
 }
 
 .nav-link {
@@ -112,11 +107,15 @@ header h1 {
 
 }
 
-.nav-link img {
+.nav-link svg {
     display: block;
-    width: 2.666vw;
-    height: 2.666vw;
+
+    width: 2.333vw;
+    height:2.333vw;
+    margin: 0;        /* por si acaso */
+    padding: 0;       /* por si acaso */
 }
+
 .icon path { fill: #800080; }
 .nav-link:hover .icon path { fill: white; }
 
@@ -127,7 +126,7 @@ header h1 {
   left: 50%;
   transform: translateX(-50%);
   background: #800080;
-  color: #fff;
+  color: #FFE4E1;
   padding: 4px 6px;
   font-size: 12px;
   white-space: nowrap;
@@ -146,16 +145,16 @@ header h1 {
     }
 }
 
-/* INDEX LISTINGS */
 
+/* INDEX LISTINGS */
 .index-listings-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 15px;
-    margin: 15px;
+    /*gap: 15px;*/
+    margin: 0;
     box-sizing: border-box;
 
-    border: 0px solid green;
+    border: 0px solid red;
 }
 
 .index-listings {
@@ -163,27 +162,11 @@ header h1 {
     height: auto;
     align-items: center;
     justify-content: center;
-    border: 0px solid black;
     border-radius: 4px;
     background-color: white;
-    padding: 15px;
-}
+    padding: 30px;
 
-.index-listings-title {
-    height: 3.333vw;
-    overflow: hidden;    /* oculta el texto que sobrepasa la altura */
-    text-overflow: ellipsis; /* opcional, agrega "..." si se corta el texto */
-}
-
-.index-lisitngs-description {
-    height: 4.5rem;      /* ajusta según la altura deseada */
-    overflow: hidden;    /* oculta el texto que sobrepasa la altura */
-    text-overflow: ellipsis; /* opcional, agrega "..." si se corta el texto */
-}
-
-.listing-price {
-    font-size: large;
-    font-weight: bolder;
+    border: 0px solid orange;
 }
 
 .index-listings img {
@@ -191,12 +174,39 @@ header h1 {
     height: 20rem;
     object-fit: cover;
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0;
+}
+
+.index-listings-title {
+    height: 3.333vw;
+    margin: 15px 0;
+    font-weight: 600;
+    overflow: hidden;    /* oculta el texto que sobrepasa la altura */
+    text-overflow: ellipsis; /* opcional, agrega "..." si se corta el texto */
+}
+
+.index-lisitngs-description {
+    display: -webkit-box;
+    font-weight: 100;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; /* cantidad de líneas visibles */
+    overflow: hidden;
+}
+
+.clase-justificada {
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto;
+}
+
+.listing-price {
+
+    font-weight: 600;
 }
 
 .index-listings:hover {
     color: #800080;
-    background-color: lightpink;
+    background-color: #FFE4E1;
 }
 
 .index-listings-link:hover,
@@ -205,6 +215,7 @@ header h1 {
 .index-listings-link:active {
   text-decoration: none;
 }
+
 
 /* GRID RESPONSIVO LISTINGS */
 @media (max-width: 992px) {
@@ -218,6 +229,7 @@ header h1 {
         grid-template-columns: 1fr;
     }
 }
+
 
 /* LISTING DETAIL*/
 .listing-detail-grid {
