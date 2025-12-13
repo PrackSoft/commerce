@@ -126,26 +126,28 @@ def place_bid(request, listing_id):
     error = ""
 
     if request.method == "POST":
-        try:
-            bid_amount = Decimal(request.POST["bid_amount"])
-        except (KeyError, ValueError):
-            error = "Invalid bid amount."
+        if request.user == listing.owner:
+            error = "Owners cannot place bids on their own listings."
         else:
-            current_amount, has_bids = current_price(listing)
-
-            if has_bids:
-                if bid_amount <= current_amount:
-                    error = f"Your bid must be greater than the current price (${current_amount})."
-                else:
-                    Bid.objects.create(amount=bid_amount, bidder=request.user, listing=listing)
-                    return redirect("listing_detail", listing_id=listing.id)
+            try:
+                bid_amount = int(request.POST["bid_amount"])
+            except (KeyError, ValueError):
+                error = "Invalid bid amount."
             else:
-                if bid_amount < current_amount:
-                    error = f"Your bid must be at least the starting price (${current_amount})."
-                else:
-                    Bid.objects.create(amount=bid_amount, bidder=request.user, listing=listing)
-                    return redirect("listing_detail", listing_id=listing.id)
+                current_amount, has_bids = current_price(listing)
 
+                if has_bids:
+                    if bid_amount <= current_amount:
+                        error = f"Your bid must be greater than the current price (${current_amount})."
+                    else:
+                        Bid.objects.create(amount=bid_amount, bidder=request.user, listing=listing)
+                        return redirect("listing_detail", listing_id=listing.id)
+                else:
+                    if bid_amount < current_amount:
+                        error = f"Your bid must be at least the starting price (${current_amount})."
+                    else:
+                        Bid.objects.create(amount=bid_amount, bidder=request.user, listing=listing)
+                        return redirect("listing_detail", listing_id=listing.id)
 
     # Build context using utils
     context = get_listing_context(listing, user=request.user, error=error)

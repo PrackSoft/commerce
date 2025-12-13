@@ -43,7 +43,7 @@ class Watchlist(models.Model):
 
 
 class Bid(models.Model):
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.IntegerField()  # Changed from DecimalField to IntegerField
     bidder = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bids")
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="bids")
 

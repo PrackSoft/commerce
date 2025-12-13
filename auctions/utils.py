@@ -34,7 +34,6 @@ def current_price(listings):
 
     raise TypeError("Argument must be a Listing or an iterable of Listings.")
 
-
 def get_listing_context(listing, user=None, error=""):
     """
     Build context dictionary for a listing page.
@@ -52,13 +51,15 @@ def get_listing_context(listing, user=None, error=""):
 
     show_message = False
     message = ""
-    if not listing.is_active and user is not None and hasattr(user, 'is_authenticated') and user.is_authenticated:
-        if user == listing.owner or user == listing.winner:
+
+    if not listing.is_active:
+        if listing.winner:
+            if user == listing.owner or user == listing.winner:
+                show_message = True
+                message = f"Auction closed. Won by {listing.winner.username}, ${current_price_value}."
+        else:
             show_message = True
-            if listing.winner:
-                message = f"Auction closed. Final price: ${current_price_value} won by {listing.winner.username}."
-            else:
-                message = f"Auction closed. No bids were placed. Starting bid: ${listing.starting_bid}"
+            message = f"Auction closed. No bids were placed. Starting bid: ${listing.starting_bid}"
 
     comments = Comment.objects.filter(listing=listing).order_by('-id')
     form = CommentForm()

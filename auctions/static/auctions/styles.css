@@ -472,6 +472,18 @@ img {
     border: 0 solid red;
 }
 
+/* Eliminar flechas del bid */
+/* Chrome, Edge, Safari */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
 /* Contenedor de input de puja */
 .listing-detail-bid-container {
     display: flex;
@@ -532,4 +544,12 @@ form {
 
 .comment-user {
     background-color: #E6CCE6;
+}
+
+/* Won message */
+.won-message {
+    padding: 12px;  
+    color: white;
+    border-radius: 12px;
+    background-color: #800080;
 }
