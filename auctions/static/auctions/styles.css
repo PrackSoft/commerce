@@ -25,6 +25,14 @@ ul { list-style: none; }
 a { text-decoration: none; color: inherit; }
 img, svg { display: block; height: 66.666vw; margin-left: auto; margin-right: auto; }
 
+::placeholder {
+    color: purple;
+    opacity: .5;
+}
+
+input[type=number] {
+    color: purple;
+}
 /* -----------------------------
    LOGIN SPECIFIC STYLES (MINIMAL)
    ----------------------------- */
