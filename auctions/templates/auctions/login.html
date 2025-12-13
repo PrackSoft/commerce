@@ -1,22 +1,27 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    {% if message %}    <!-- Displays feedback messages conditionally to inform the user of errors or status updates. -->
-        <div>{{ message }}</div>
-    {% endif %}
-    <!-- Uses a POST method with CSRF protection to securely submit login credentials. -->
-    <form action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-        <!-- Applies Bootstrap classes (form-control and btn btn-primary) for consistent styling and responsive design. -->
-        <div class="form-group">
-            <input autofocus class="form-control" type="text" name="username" placeholder="Username">   <!-- Autofocuses the username field to improve usability. -->
-        </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="password" placeholder="Password">
-        </div>
-        <input class="btn btn-primary" type="submit" value="Login">
-    </form>
+    <div class="center-col">
 
-    Don't have an account? <a href="{% url 'register' %}">Register here.</a>    <!-- Includes a link to the registration page for users who do not yet have an account, enhancing navigation. -->
+        <div class="middle-col">
+            {% if message %}    <!-- Displays feedback messages conditionally to inform the user of errors or status updates. -->
+                <div>{{ message }}</div>
+            {% endif %}
+            <!-- Uses a POST method with CSRF protection to securely submit login credentials. -->
+            <form action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                <!-- Applies Bootstrap classes (form-control and btn btn-primary) for consistent styling and responsive design. -->
+                <div class="form-group">
+                    <input autofocus class="form-control" type="text" name="username" placeholder="Username">   <!-- Autofocuses the username field to improve usability. -->
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="password" name="password" placeholder="Password">
+                </div>
+                <input class="btn btn-primary" type="submit" value="Login">
+            </form>
 
+            Don't have an account? <a href="{% url 'register' %}">Register here.</a>    <!-- Includes a link to the registration page for users who do not yet have an account, enhancing navigation. -->
+        </div>
+
+    </div>
 {% endblock %}

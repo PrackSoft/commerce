@@ -9,24 +9,22 @@
     vertical-align: baseline;
 }
 
+
+/* Global Styles */
 html, body {
-    width: 100vw;   /* 100% del ancho de la ventana */
-    height: 100vh;  /* 100% del alto de la ventana */
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
     background: white;
-}
-
-body {
-    color: #800080;
     line-height: 1;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #800080;
+
+    border: 0 solid purple;
 }
 
-ol, ul {
+ul {
     list-style: none;
-}
-
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
 }
 
 a {
@@ -34,18 +32,127 @@ a {
     color: inherit;
 }
 
-img, video, canvas, svg {
+img, svg {
     display: block;
-    max-width: 100%;
-    height: auto;
+    /*max-width: 100%;*/
+    height: 66.666vw;
+    margin-left: auto;
+    margin-right: auto;
 }
----
 
-/* BODY GENERAL */
-body {
+/* Grid wrapper for the form */
+.center-col {
+    display: grid;
+    grid-template-columns: auto 1fr auto; /* left | center | right */
+    width: 100%;
+    height: 100vh;                        /* opcional: centra verticalmente si usás align-items */
+    align-items: center;                  /* centra verticalmente los hijos */
+
+    border: 0 solid orange;
+}
+
+/* Columna central con formulario */
+.middle-col {
     display: flex;
     flex-direction: column;
+        grid-column: 2;
+
+    align-items: center; /* centra horizontalmente contenido del formulario */
+    gap: 10px;           /* separación entre elementos */
+    width: 100%;
 }
+
+/* Formulario dentro de la columna central */
+.middle-col form {
+    width: 100%;
+    max-width: 33.333vw;
+    display: flex;
+    flex-direction: column;
+    gap: 1.333vw;
+    margin: 1.333vw;
+
+    border: 0 solid red;
+}
+
+/* Inputs y botón */
+.middle-col input.form-control {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    background-color: lightpink !important;
+    color: purple !important;
+}
+
+.middle-col input {
+    background-color: #FFE4E1; /* color de fondo */
+    color: #800080;            /* color del texto */
+}
+
+.center-col .middle-col input.btn {
+    width: 100%;
+    padding: 8px;
+    background-color: lightpink;
+    color: #800080;
+    border: 0 solid white;
+
+}
+
+.center-col .middle-col input.btn:hover {
+    color: white;
+    background-color: #800080;
+}
+
+/* Input focus: purple border, texto purple */
+.middle-col input.form-control:focus {
+    background-color: lightpink !important;
+    color: purple !important;
+    border-color: purple !important;
+    box-shadow: 0 0 0 0.2rem rgba(128, 0, 128, 0.25); /* opcional: sombra de foco */
+    outline: none;
+}
+
+
+
+.middle-col input.form-control::placeholder {
+    color: purple;
+    opacity: 0.7; /* 0 para invisible */
+    background: transparent; /* no aplica, solo para limpieza */
+}
+.middle-col input,
+.middle-col input.form-control,
+.middle-col input:focus,
+.middle-col input::placeholder {
+    background-color: #FFE4E1 !important;
+    color: #800080 !important;
+    border-color: #800080 !important;
+    outline: none !important;
+}
+
+.center-col .middle-col form .form-control {
+    background-color: lightpink !important;
+    color: purple !important;
+    border: 1px solid purple !important;
+}
+
+.center-col .middle-col form .form-control:focus {
+    background-color: lightpink !important;
+    color: purple !important;
+    border-color: purple !important;
+    box-shadow: 0 0 0 0.2rem rgba(128,0,128,0.25) !important;
+    outline: none !important;
+}
+
+.center-col .middle-col form .form-control::placeholder {
+    color: purple !important;
+    opacity: 0.7;
+}
+
+.center-col .middle-col input.form-control {
+    background-color: lightpink !important;
+    color: purple !important;
+    border: none !important;
+}
+
 
 /* HEADER GRID 3 COLUMNAS*/
 header {
@@ -55,9 +162,9 @@ header {
     align-items: center;
     height: calc(33.333vw - 3.333vw);
     margin: 0;
-    border-radius: 0.25rem;
     background-color: lightpink;
-    padding: 30px;
+    padding: 2.777vw;
+    gap: 1.388vw;
 
     border: 0px solid red;
 }
@@ -66,7 +173,7 @@ header {
 header h1 {
     text-align: center;
     font-family: "Major Mono Display", monospace;
-    font-size: 5.666vw;
+    font-size: 5.555vw;
     font-weight: 900;
     width: 33.333vw;
     height: auto;
@@ -82,12 +189,15 @@ header h1 {
     
     background-color: #800080;
     width: 100%;
-    height: 1.999vw;
+    height: 2.777vw;
     color: white;
     padding: 0.5rem;
     border-radius: 0.25rem;
     margin: 0;
-    font-size: 1.333vw;
+    font-size: 1.388vw;
+}
+.user-greeting strong {
+    font-weight: 700;
 }
 .nav {
     display: flex;
@@ -113,12 +223,22 @@ header h1 {
 .nav-link svg {
     display: block;
 
-    width: 2.333vw;
-    height:2.333vw;
+    width: 2.777vw;
+    height:2.777vw;
     margin: 0;        /* por si acaso */
     padding: 0;       /* por si acaso */
 }
-
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
 .icon path { fill: #800080; }
 .nav-link:hover .icon path { fill: white; }
 
@@ -153,26 +273,34 @@ header h1 {
 .index-listings-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    /*gap: 15px;*/
-    margin: 0;
     box-sizing: border-box;
 
-    border: 0px solid red;
+    border: 0 solid red;
 }
 
-.index-listings {
+.index-listings-link:hover,
+.index-listings-link:focus,
+.index-listings-link:visited,
+.index-listings-link:active {
+    text-decoration: none;
+}
+
+.index-listings-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* separa elementos al máximo verticalmente */
     width: auto;
-    height: auto;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
+    height: 50vw;
     background-color: white;
-    padding: 1.999vw 1.999vw 1.999vw 1.999vw;
+    padding: 2.777vw 2.777vw 2.777vw 2.777vw;
 
-    border: 0px solid orange;
+    border: 0 solid orange;
+}
+.index-listings-container:hover {
+    background-color: #FFE4E1;
 }
 
-.index-listings img {
+.index-listings-container img {
     width: 100%;
     height: 20rem;
     object-fit: cover;
@@ -181,23 +309,29 @@ header h1 {
 }
 
 .index-listings-title {
-    height: 3.333vw;
-    margin: 15px 0;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;   /* orienta las líneas verticalmente */
+    -webkit-line-clamp: 2;
+    overflow: hidden;               /* oculta el exceso de texto */
+    width: 27.779vw;
     font-weight: 600;
-    overflow: hidden;    /* oculta el texto que sobrepasa la altura */
-    text-overflow: ellipsis; /* opcional, agrega "..." si se corta el texto */
 
-    border: 0px solid white;
+    
+
+    border: 0 solid blue;
 }
 
 .index-listings-description {
-    display: -webkit-box;
-    font-weight: 200;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3; /* cantidad de líneas visibles */
-    overflow: hidden;
+    display: -webkit-box;           /* activa el modelo flexible para clamping */
+    -webkit-box-orient: vertical;   /* orienta las líneas verticalmente */
+    -webkit-line-clamp: 4;          /* limita a 4 líneas */
+    overflow: hidden;               /* oculta el exceso de texto */
+    width: 27.779vw;
 
-    border: 0px solid lightblue;
+    font-weight: 200;
+    height: 5.331vw;
+
+    border: 0 solid blue;
 }
 
 .clase-justificada {
@@ -207,24 +341,15 @@ header h1 {
 }
 
 .listing-price {
-
+    display: flex;
+    align-items: flex-end;
     font-weight: 600;
-    padding: 1.333vw 0 0 0;
-    margin: 0 0 0 0;
-    border: 0px solid lightblue;
-}
-
-.index-listings:hover {
     color: #800080;
-    background-color: #FFE4E1;
+    height: 1.777vw;
+
+    border: 0 solid blue;
 }
 
-.index-listings-link:hover,
-.index-listings-link:focus,
-.index-listings-link:visited,
-.index-listings-link:active {
-  text-decoration: none;
-}
 
 
 /* GRID RESPONSIVO LISTINGS */
@@ -245,30 +370,96 @@ header h1 {
 .listing-detail-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: 1.999vw;
-    margin: 1.999vw;
-    padding: 1.999vw;
     box-sizing: border-box;
-    border-radius: .999vw;
-    border: .333vw solid lightpink;
-}
-
-.listing-detail-picture {
-    width: auto;
-    height: auto;
-    align-items: center;
-    justify-content: center;
-    background-color: lightgray;
 
     border: 0px solid red;
 }
 
-.listing-detail-text {
-    padding: .999vw;
+.listing-detail-container {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: center;
+    background-color: #FFE4E1;
+    padding: 2.777vw;
+    gap: 2.777vw;
+
+    border: 0 solid orange;
 }
 
-.underline {
+.listing-detail-image {
+    width: 63.889vw;
+    height: 63.889vw;
+    background-color: #E6CCE6;
+    overflow: hidden;
+
+    border: 0px solid red;
+}
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.listing-detail-text {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 27.779vw;
+    gap: 2.777vw;
+    margin: 0;
+    border: 0 solid red;
+}
+
+.listing-detail-owner {
     display: inline-block;
     border-bottom: 2px solid #800080;
-    padding-bottom: 2px;
+    padding-bottom: 1.385vw;
+    font-weight: 700;
+    margin: 0;
+}
+
+.listing-detail-title {
+    width: 27.779vw;
+    height: 4.166vw;
+    font-weight: 700;
+
+    border: 0 solid blue;
+}
+
+.listing-detail-price {
+    font-weight: 700;
+
+}
+
+.listing-detail-button {
+    position: relative;
+    width: 100%;
+    height: 2.777vw;
+    color: #800080;
+    background-color: lightpink;           /* o el color que quieras */
+    cursor: pointer;
+
+}
+.listing-detail-button .icon {
+    width: 2.777vw;              /* tamaño del SVG */
+    height: 2.777vw;
+}
+.listing-detail-button:hover .icon path {
+    fill: white;
+}
+.listing-detail-button:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  top: 100%;       /* separa el texto hacia abajo */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #800080;
+  color: #FFE4E1;
+  padding: 4px 6px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.listing-detail-button svg {
+  pointer-events: none; /* evita que el hover del SVG genere el tooltip */
 }

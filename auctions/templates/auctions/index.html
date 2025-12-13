@@ -4,7 +4,7 @@
 <div class="index-listings-grid">
     {% for listing in listings %}
     <a class="index-listings-link" href="{% url 'listing_detail' listing.id %}">
-        <div class="index-listings">
+        <div class="index-listings-container">
             {% if listing.image_url %}
                 <img src="{{ listing.image_url }}" alt="{{ listing.title }}">
             {% endif %}
