@@ -164,9 +164,9 @@ header {
     margin: 0;
     background-color: lightpink;
     padding: 2.777vw;
-    gap: 1.388vw;
+    gap: 1.999vw;
 
-    border: 0px solid red;
+    border: 0 solid red;
 }
 
 
@@ -179,7 +179,7 @@ header h1 {
     height: auto;
     margin: 0;
 
-    border: 0px solid orange;
+    border: 0 solid orange;
 }
 
 .user-greeting {
@@ -192,7 +192,7 @@ header h1 {
     height: 2.777vw;
     color: white;
     padding: 0.5rem;
-    border-radius: 0.25rem;
+    border-radius: 12px;
     margin: 0;
     font-size: 1.388vw;
 }
@@ -206,7 +206,7 @@ header h1 {
     justify-content: space-between;
     list-style: none;
 
-    border: 0px solid orange;
+    border: 0 solid orange;
 }
 
 .nav-item {
@@ -371,7 +371,6 @@ header h1 {
     display: grid;
     grid-template-columns: 2fr 1fr;
     box-sizing: border-box;
-
     border: 0px solid red;
 }
 
@@ -383,7 +382,6 @@ header h1 {
     background-color: #FFE4E1;
     padding: 2.777vw;
     gap: 2.777vw;
-
     border: 0 solid orange;
 }
 
@@ -392,9 +390,9 @@ header h1 {
     height: 63.889vw;
     background-color: #E6CCE6;
     overflow: hidden;
-
     border: 0px solid red;
 }
+
 img {
     width: 100%;
     height: 100%;
@@ -423,13 +421,11 @@ img {
     width: 27.779vw;
     height: 4.166vw;
     font-weight: 700;
-
     border: 0 solid blue;
 }
 
 .listing-detail-price {
     font-weight: 700;
-
 }
 
 .listing-detail-button {
@@ -437,29 +433,103 @@ img {
     width: 100%;
     height: 2.777vw;
     color: #800080;
-    background-color: lightpink;           /* o el color que quieras */
+    background-color: lightpink;
     cursor: pointer;
-
 }
+
 .listing-detail-button .icon {
-    width: 2.777vw;              /* tamaño del SVG */
+    width: 2.777vw;
     height: 2.777vw;
 }
+
 .listing-detail-button:hover .icon path {
     fill: white;
 }
+
 .listing-detail-button:hover::after {
-  content: attr(data-tip);
-  position: absolute;
-  top: 100%;       /* separa el texto hacia abajo */
-  left: 50%;
-  transform: translateX(-50%);
-  background: #800080;
-  color: #FFE4E1;
-  padding: 4px 6px;
-  font-size: 12px;
-  white-space: nowrap;
+    content: attr(data-tip);
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #800080;
+    color: #FFE4E1;
+    padding: 4px 6px;
+    font-size: 12px;
+    white-space: nowrap;
 }
+
 .listing-detail-button svg {
-  pointer-events: none; /* evita que el hover del SVG genere el tooltip */
+    pointer-events: none;
+}
+
+/* Contenedor general */
+.listing-detail-forms-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1.388vw;
+    border: 0 solid red;
+}
+
+/* Contenedor de input de puja */
+.listing-detail-bid-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+}
+
+/* Input de puja y textarea de comentarios unificados */
+.listing-detail-bid,
+.listing-detail-textarea textarea,
+.comments-text {
+    width: 100%;
+    padding: 12px;
+    box-sizing: border-box;
+    border-radius: 12px;
+    outline: none;
+}
+
+/* Focus unificado sin bordes visibles */
+.listing-detail-bid:focus,
+.listing-detail-textarea textarea:focus,
+.comments-text:focus,
+form input:focus,
+form textarea:focus {
+    outline: 3px solid #800080 !important;
+    box-shadow: none !important;
+}
+
+/* Contenedor de comentarios */
+.listing-detail-textarea-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+}
+
+.listing-detail-comments-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 2.777vw;
+    fill: #800080;
+    margin: 0;
+    border: 0 solid red;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.comment-owner {
+    background-color: white;
+}
+
+.comment-user {
+    background-color: #E6CCE6;
 }

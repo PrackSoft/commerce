@@ -1,16 +1,14 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<!-- Organizes content within semantic HTML and structured <div> blocks, supporting readability and styling. -->
 <div class="listing-detail-grid">
     <div class="listing-detail-container">
         <div class="listing-detail-image">
-            {% if listing.image_url %}  <!-- Conditionally renders the listing image only if a URL is provided, preventing broken images. -->
+            {% if listing.image_url %}
                 <img src="{{ listing.image_url }}" alt="{{ listing.title }}">
             {% endif %}
         </div>
         <div class="listing-detail-text">
-            <!-- Displays key listing information including title, description, current price, and current owner, providing context for the auction. -->
             <p class="listing-detail-owner">By {{ listing.owner }}</p>
             <h3 class="listing-detail-title">{{ listing.title }}</h3>
 
@@ -22,15 +20,15 @@
                     From: ${{ listing.starting_bid }}
                 {% endif %}
             </p>
-            {% if request.user.is_authenticated and request.user == listing.owner and listing.is_active %} <!-- Allows the listing owner to close the auction when active, using a CSRF-protected form for security. -->
+
+            {% if request.user.is_authenticated and request.user == listing.owner and listing.is_active %}
                 <form action="{% url 'close_auction' listing.id %}" method="post">
                     {% csrf_token %}
-                    <button class="listing-detail-button" type="submit" 
-                        data-tip="Close Auction">
-                        <!-- SVG para cerrar la subasta -->
+                    <button class="listing-detail-button" type="submit" data-tip="Close Auction">
                         <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Close Auction" focusable="false">
                             <title>Close Auction</title>
-                            <path d="M160-120v-66.67h480V-120H160Zm223.33-206L160-549.33 234.67-626 460-402.67 383.33-326Zm254-254L414-805.33 490.67-880 714-656.67 637.33-580Zm196 420L302-691.33 348.67-738 880-206.67 833.33-160Z"/>                        </svg>
+                            <path d="M160-120v-66.67h480V-120H160Zm223.33-206L160-549.33 234.67-626 460-402.67 383.33-326Zm254-254L414-805.33 490.67-880 714-656.67 637.33-580Zm196 420L302-691.33 348.67-738 880-206.67 833.33-160Z"/>
+                        </svg>
                     </button>
                 </form>
             {% endif %}
@@ -39,81 +37,84 @@
                 <p style="color:green">{{ message }}</p>
             {% endif %}
 
-            {% if request.user.is_authenticated and request.user == listing.owner and not listing.is_active %} <!-- Allows the listing owner to close the auction when active, using a CSRF-protected form for security. -->
+            {% if request.user.is_authenticated and request.user == listing.owner and not listing.is_active %}
                 <form action="{% url 'remove_listing_from_mode' listing.id %}" method="post">
                     {% csrf_token %}
-                    <button class="listing-detail-button" type="submit" 
-                        data-tip="Remove from My Listings">
-                        <!-- SVG para remover de My Listings -->
+                    <button class="listing-detail-button" type="submit" data-tip="Remove from My Listings">
                         <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Remove from My Listings" focusable="false">
                             <title>Remove from My Listings</title>
-                            <path d="M200-446.67v-66.66h560v66.66H200Z"/> 
-                        </svg>                   
+                            <path d="M200-446.67v-66.66h560v66.66H200Z"/>
+                        </svg>
                     </button>
                 </form>
             {% endif %}
 
-            {% if request.user.is_authenticated and request.user != listing.owner and listing.is_active %}  <!-- Enables authenticated users to add or remove the listing from their watchlist, improving engagement. -->
-            <form method="post" action="{% url 'toggle_watchlist' listing.id %}">
-                {% csrf_token %}
-                <button type="submit" class="listing-detail-button" 
-                    data-tip="{% if is_watching %}Remove from Watchlist{% else %}Add to Watchlist{% endif %}">
-                    {% if is_watching %}
-                        <!-- SVG para quitar de watchlist -->
-                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Remove from Watchlist" focusable="false">
-                            <title>Remove from Watchlist</title>
-                            <path d="M440-498.33Zm0 377.66-108.33-98.66Q245-298.33 188.83-355q-56.16-56.67-89.33-101.67T53.17-541Q40-580.33 40-623.67q0-92 61.67-154.16Q163.33-840 253.33-840q55.34 0 103.34 25T440-742.67q38.67-48.66 85.67-73 47-24.33 101-24.33 86.66 0 150 61Q840-718 840-623.67q0 24-4.33 46.17-4.34 22.17-11 37.5h-71q7-17.33 13-41t6-43.67q0-67.66-45.67-108.16t-100.33-40.5q-51 0-92.67 29.83t-70.33 82.83h-48Q388-713 345.5-743.17q-42.5-30.16-92.17-30.16-62.33 0-104.5 42.5-42.16 42.5-42.16 107.16 0 35 13 69t49.33 79.5q36.33 45.5 101.67 108.67Q336-303.33 440-209.33q30-27 60.67-53.67 30.66-26.67 56.33-49.33l7.33 7.33q7.34 7.33 16.17 15.83 8.83 8.5 16.17 15.84L604-266q-25.33 22.67-56 49.17t-61.33 54.16l-46.67 42Zm160-286v-66.66h320v66.66H600Z"/>
-                        </svg>
-                    {% else %}
-                        <!-- SVG para agregar a watchlist -->
-                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Add to Watchlist" focusable="false">
-                            <title>Add to Watchlist</title>
-                            <path d="M440-498.33Zm0 377.66-108.33-98.66q-82-75-137.5-130t-90-100.67q-34.5-45.67-49.34-86.67-14.83-41-14.83-87Q40-715 101.33-777.5q61.34-62.5 152-62.5 55.34 0 103.34 25T440-742.67Q479.33-792 526.33-816t100.34-24q80.71 0 135.52 51.83 54.81 51.84 69.48 126.84H764q-12-50-48.67-81-36.66-31-88.66-31-51 0-92.67 29.83t-70.33 82.83h-48Q388-713 345.5-743.17q-42.5-30.16-92.17-30.16-63 0-104.83 42.83t-41.83 106.83q0 37 15 73t52.59 82.22q37.59 46.21 102.33 108Q341.33-298.67 440-209.33q30-27 60.67-53.67 30.66-26.67 56.33-49.33l7.42 7.31q7.42 7.32 16.08 15.85 8.66 8.54 16.08 15.85L604-266q-25.33 22.67-56 49.17t-61.33 54.16l-46.67 42ZM726.67-280v-126.67H600v-66.66h126.67V-600h66.66v126.67H920v66.66H793.33V-280h-66.66Z"/>
-                        </svg>
+            {% if request.user.is_authenticated and request.user != listing.owner and listing.is_active %}
+                <form method="post" action="{% url 'toggle_watchlist' listing.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="listing-detail-button" data-tip="{% if is_watching %}Remove from Watchlist{% else %}Add to Watchlist{% endif %}">
+                        {% if is_watching %}
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Remove from Watchlist" focusable="false">
+                                <title>Remove from Watchlist</title>
+                                <path d="M440-498.33Zm0 377.66-108.33-98.66Q245-298.33 188.83-355q-56.16-56.67-89.33-101.67T53.17-541Q40-580.33 40-623.67q0-92 61.67-154.16Q163.33-840 253.33-840q55.34 0 103.34 25T440-742.67q38.67-48.66 85.67-73 47-24.33 101-24.33 86.66 0 150 61Q840-718 840-623.67q0 24-4.33 46.17-4.34 22.17-11 37.5h-71q7-17.33 13-41t6-43.67q0-67.66-45.67-108.16t-100.33-40.5q-51 0-92.67 29.83t-70.33 82.83h-48Q388-713 345.5-743.17q-42.5-30.16-92.17-30.16-62.33 0-104.5 42.5-42.16 42.5-42.16 107.16 0 35 13 69t49.33 79.5q36.33 45.5 101.67 108.67Q336-303.33 440-209.33q30-27 60.67-53.67 30.66-26.67 56.33-49.33l7.33 7.33q7.34 7.33 16.17 15.83 8.83 8.5 16.17 15.84L604-266q-25.33 22.67-56 49.17t-61.33 54.16l-46.67 42Zm160-286v-66.66h320v66.66H600Z"/>
+                            </svg>
+                        {% else %}
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Add to Watchlist" focusable="false">
+                                <title>Add to Watchlist</title>
+                                <path d="M440-498.33Zm0 377.66-108.33-98.66q-82-75-137.5-130t-90-100.67q-34.5-45.67-49.34-86.67-14.83-41-14.83-87Q40-715 101.33-777.5q61.34-62.5 152-62.5 55.34 0 103.34 25T440-742.67Q479.33-792 526.33-816t100.34-24q80.71 0 135.52 51.83 54.81 51.84 69.48 126.84H764q-12-50-48.67-81-36.66-31-88.66-31-51 0-92.67 29.83t-70.33 82.83h-48Q388-713 345.5-743.17q-42.5-30.16-92.17-30.16-63 0-104.83 42.83t-41.83 106.83q0 37 15 73t52.59 82.22q37.59 46.21 102.33 108Q341.33-298.67 440-209.33q30-27 60.67-53.67 30.66-26.67 56.33-49.33l7.42 7.31q7.42 7.32 16.08 15.85 8.66 8.54 16.08 15.85L604-266q-25.33 22.67-56 49.17t-61.33 54.16l-46.67 42ZM726.67-280v-126.67H600v-66.66h126.67V-600h66.66v126.67H920v66.66H793.33V-280h-66.66Z"/>
+                            </svg>
+                        {% endif %}
+                    </button>
+                </form>
+            {% endif %}
+
+            <div class="listing-detail-forms-container">
+                {% if request.user.is_authenticated and request.user != listing.owner and listing.is_active %}
+                    <form method="post" action="{% url 'place_bid' listing.id %}">
+                        {% csrf_token %}
+                        <input class="listing-detail-bid" type="number" step="0.01" name="bid_amount" placeholder="Enter your bid" required>
+                        <button type="submit" class="listing-detail-button" data-tip="Enter your Bid" aria-label="Enter your Bid">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" focusable="false">
+                                <title>Place a Bid</title>
+                                <path d="M300.08-246.67q22.25 0 37.75-15.58 15.5-15.57 15.5-37.83 0-22.25-15.58-37.75-15.57-15.5-37.83-15.5-22.25 0-37.75 15.58-15.5 15.57-15.5 37.83 0 22.25 15.58 37.75 15.57 15.5 37.83 15.5Zm0-360q22.25 0 37.75-15.58 15.5-15.57 15.5-37.83 0-22.25-15.58-37.75-15.57-15.5-37.83-15.5-22.25 0-37.75 15.58-15.5 15.57-15.5 37.83 0 22.25 15.58 37.75 15.57 15.5 37.83 15.5Zm180 180q22.25 0 37.75-15.58 15.5-15.57 15.5-37.83 0-22.25-15.58-37.75-15.57-15.5-37.83-15.5-22.25 0-37.75 15.58-15.5 15.57-15.5 37.83 0 22.25 15.58 37.75 15.57 15.5 37.83 15.5Zm180 180q22.25 0 37.75-15.58 15.5-15.57 15.5-37.83 0-22.25-15.58-37.75-15.57-15.5-37.83-15.5-22.25 0-37.75 15.58-15.5 15.57-15.5 37.83 0 22.25 15.58 37.75 15.57 15.5 37.83 15.5Zm0-360q22.25 0 37.75-15.58 15.5-15.57 15.5-37.83 0-22.25-15.58-37.75-15.57-15.5-37.83-15.5-22.25 0-37.75 15.58-15.5 15.57-15.5 37.83 0 22.25 15.58 37.75 15.57 15.5 37.83 15.5ZM186.67-120q-27 0-46.84-19.83Q120-159.67 120-186.67v-586.66q0-27 19.83-46.84Q159.67-840 186.67-840h586.66q27 0 46.84 19.83Q840-800.33 840-773.33v586.66q0 27-19.83 46.84Q800.33-120 773.33-120H186.67Zm0-66.67h586.66v-586.66H186.67v586.66Zm0-586.66v586.66-586.66Z"/>
+                            </svg>
+                        </button>
+                    </form>
+
+                    {% if error %}
+                        <p style="color:red">{{ error }}</p>
                     {% endif %}
-                </button>
-            </form>
-            {% endif %}
-
-            {% if request.user.is_authenticated and request.user != listing.owner and listing.is_active %}  <!-- Provides a form for placing bids with numeric validation and displays errors when bids are invalid. -->
-                <form method="post" action="{% url 'place_bid' listing.id %}">
-                    {% csrf_token %}
-                    <input type="number" step="0.01" name="bid_amount" placeholder="Enter your bid" required>
-
-                    <button type="submit" class="listing-detail-button" data-tip="Enter your Bid" aria-label="Enter your Bid">
-                        <!-- SVG para colocar una oferta -->
-                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" focusable="false">
-                            <title>Place a Bid</title>
-                            <path d="M300.08-246.67q22.25 0 37.75-15.58 15.5-15.57 15.5-37.83 0-22.25-15.58-37.75-15.57-15.5-37.83-15.5-22.25 0-37.75 15.58-15.5 15.57-15.5 37.83 0 22.25 15.58 37.75 15.57 15.5 37.83 15.5Zm0-360q22.25 0 37.75-15.58 15.5-15.57 15.5-37.83 0-22.25-15.58-37.75-15.57-15.5-37.83-15.5-22.25 0-37.75 15.58-15.5 15.57-15.5 37.83 0 22.25 15.58 37.75 15.57 15.5 37.83 15.5Zm180 180q22.25 0 37.75-15.58 15.5-15.57 15.5-37.83 0-22.25-15.58-37.75-15.57-15.5-37.83-15.5-22.25 0-37.75 15.58-15.5 15.57-15.5 37.83 0 22.25 15.58 37.75 15.57 15.5 37.83 15.5Zm180 180q22.25 0 37.75-15.58 15.5-15.57 15.5-37.83 0-22.25-15.58-37.75-15.57-15.5-37.83-15.5-22.25 0-37.75 15.58-15.5 15.57-15.5 37.83 0 22.25 15.58 37.75 15.57 15.5 37.83 15.5Zm0-360q22.25 0 37.75-15.58 15.5-15.57 15.5-37.83 0-22.25-15.58-37.75-15.57-15.5-37.83-15.5-22.25 0-37.75 15.58-15.5 15.57-15.5 37.83 0 22.25 15.58 37.75 15.57 15.5 37.83 15.5ZM186.67-120q-27 0-46.84-19.83Q120-159.67 120-186.67v-586.66q0-27 19.83-46.84Q159.67-840 186.67-840h586.66q27 0 46.84 19.83Q840-800.33 840-773.33v586.66q0 27-19.83 46.84Q800.33-120 773.33-120H186.67Zm0-66.67h586.66v-586.66H186.67v586.66Zm0-586.66v586.66-586.66Z"/>
-                        </svg>
-                    </button>
-                </form>
-
-                {% if error %}
-                    <p style="color:red">{{ error }}</p>
                 {% endif %}
-            {% endif %}
+            </div>
 
-            {% if request.user.is_authenticated and listing.is_active %}  <!-- Allows authenticated users to submit comments and displays all existing comments dynamically. -->
-                <form method="post" action="{% url 'add_comment' listing.id %}">
-                    {% csrf_token %}
-                    {{ form.text }}
-                    <button class="listing-detail-button" type="submit"
-                        data-tip="Add Comment">
-                        <!-- SVG para cerrar la subasta -->
-                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Add Comment" focusable="false">
-                            <title>Add Comment</title>
-                            <path d="M240-399.33h315.33V-466H240v66.67ZM240-526h480v-66.67H240V-526Zm0-126.67h480v-66.66H240v66.66ZM480-80 375-238H146.67q-27.5 0-47.09-19.58Q80-277.17 80-304.67v-508.66q0-27.5 19.58-47.09Q119.17-880 146.67-880h666.66q27.5 0 47.09 19.58Q880-840.83 880-813.33v508.66q0 27.5-19.58 47.09Q840.83-238 813.33-238H585L480-80Zm0-120 69.33-104.67h264v-508.66H146.67v508.66h264L480-200Zm0-359.33Z"/>
-                        </svg>
-                    </button>
-                </form>
-            {% endif %}
-            <h3>Comments:</h3>
-            {% for comment in comments %}
-                <div>{{ comment.author }}: {{ comment.text }}</div>
-            {% empty %} <!-- Handles empty comment lists gracefully with empty, improving user experience. -->
-                <p>No comments yet.</p>
-            {% endfor %}
+            <div class="listing-detail-forms-container">
+                {% if request.user.is_authenticated and listing.is_active %}
+                    <form method="post" action="{% url 'add_comment' listing.id %}">
+                        {% csrf_token %}
+                        {{ form.text }}
+                        <button class="listing-detail-button" type="submit" data-tip="Add Comment">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Add Comment" focusable="false">
+                                <title>Add Comment</title>
+                                <path d="M240-399.33h315.33V-466H240v66.67ZM240-526h480v-66.67H240V-526Zm0-126.67h480v-66.66H240v66.66ZM480-80 375-238H146.67q-27.5 0-47.09-19.58Q80-277.17 80-304.67v-508.66q0-27.5 19.58-47.09Q119.17-880 146.67-880h666.66q27.5 0 47.09 19.58Q880-840.83 880-813.33v508.66q0 27.5-19.58 47.09Q840.83-238 813.33-238H585L480-80Zm0-120 69.33-104.67h264v-508.66H146.67v508.66h264L480-200Zm0-359.33Z"/>
+                            </svg>
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+
+            <div class="listing-detail-forms-container">
+                <svg class="listing-detail-comments-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Tread" focusable="false">
+                    <title>Tread</title>
+                    <path d="M880-80.67 720.67-240h-414q-27.5 0-47.09-19.58Q240-279.17 240-306.67v-66.66h440q27.5 0 47.08-19.59 19.59-19.58 19.59-47.08v-280h66.66q27.5 0 47.09 19.58Q880-680.83 880-653.33v572.66ZM146.67-441l65.66-65.67h401v-306.66H146.67V-441ZM80-280v-533.33q0-27.5 19.58-47.09Q119.17-880 146.67-880h466.66q27.5 0 47.09 19.58Q680-840.83 680-813.33v306.66q0 27.5-19.58 47.09Q640.83-440 613.33-440H240L80-280Zm66.67-226.67v-306.66 306.66Z"/>
+                </svg>
+                {% for comment in comments %}
+                    <div class="comments-text {% if comment.author == listing.owner %}comment-owner{% else %}comment-user{% endif %}">
+                        {{ comment.author }}: {{ comment.text }}
+                    </div>
+                {% empty %}
+                    <p>No comments yet.</p>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>

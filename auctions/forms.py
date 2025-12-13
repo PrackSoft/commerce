@@ -15,9 +15,18 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'text': forms.Textarea(attrs={
                 # Limiting rows and cols provides consistent form layout and prevents overly large input areas.
-                'rows': 2, 
-                'cols': 40,
+                'rows': 3, # Visible height
+                'cols': 40, # Visible width
                 # Adding placeholder in the widget guides users on what to enter, enhancing usability.
-                'placeholder': 'Write a comment...'
+                'placeholder': 'Write a comment...',
+                # padding agregado
+                'style': (
+                    'padding: 12px; '
+                    'border-radius: 12px; '
+                    'width: 100%; '
+                    'box-sizing: border-box; '
+                    'background-color: white; '
+                    'color: #800080; '
+                    )
                 }) 
             }
