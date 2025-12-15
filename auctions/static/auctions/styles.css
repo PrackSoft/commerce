@@ -120,19 +120,36 @@ header {
     background-color: var(--color-primary);
     padding: 2.777vw;
     gap: 1.999vw;
-    border: 0 solid red;
+
+    border: 0 solid purple;
+}
+
+.isotype-box {
+    display: flex;
+    align-items: center; /* centra verticalmente los hijos */
+    width: 33.333vw;
+
+    border: 0 solid blue;
 }
 
 header h1 {
-    width: 33.333vw;
-    height: auto;
     margin: 0;
-    text-align: center;
     font-family: "Major Mono Display", monospace;
-    font-size: 5.555vw;
+    font-size: 5.666vw;
     font-weight: 900;
+    letter-spacing: -.033em;
     color: var(--color-quaternary);
-    border: 0 solid orange;
+    padding: 0;
+    margin: 0;
+
+    border: 0 solid red;
+}
+
+header .isotype-icon-size {
+    width: 4.666vw;
+    height: 5.93vw;
+
+    border: 0 solid red;
 }
 
 .user-greeting {
@@ -150,12 +167,13 @@ header h1 {
 }
 .user-greeting strong { font-weight: 700; }
 
-.nav {
+.nav-box {
     display: flex;
     flex-wrap: nowrap;
     width: 33.333vw;
     justify-content: space-between;
     list-style: none;
+
     border: 0 solid orange;
 }
 
@@ -175,7 +193,7 @@ header h1 {
     position: relative;
 }
 
-.nav-link svg {
+.navbar-icon-size {
     display: block;
     width: 2.777vw;
     height: 2.777vw;
