@@ -25,8 +25,8 @@ class CommentForm(forms.ModelForm):
                     'border-radius: 12px; '
                     'width: 100%; '
                     'box-sizing: border-box; '
-                    'background-color: white; '
-                    'color: #800080; '
+                    'background-color: var(--color-primary); '
+                    'color: var(--color-quaternary); '
                     )
                 }) 
             }
