@@ -36,7 +36,6 @@
                         </svg>
                     </a>
                 </li>
-
                 {% if request.user.is_authenticated %}
                 <!-- Create Listing -->
                 <li class="nav-item">
@@ -46,7 +45,6 @@
                         </svg>
                     </a>
                 </li>
-
                 <!-- My Listings -->
                 <li class="nav-item">
                     <a class="nav-link" data-tip="My Listings" href="{% url 'my_listings' %}">
@@ -55,7 +53,6 @@
                         </svg>
                     </a>
                 </li>
-
                 <!-- Categories -->
                 <li class="nav-item">
                     <a class="nav-link" data-tip="Categories" href="{% url 'categories' %}">
@@ -64,7 +61,6 @@
                         </svg>
                     </a>
                 </li>
-
                 <!-- My Purchases -->
                 <li class="nav-item">
                     <a class="nav-link" data-tip="My Purchases" href="{% url 'my_purchases' %}">
@@ -73,7 +69,6 @@
                         </svg>
                     </a>
                 </li>
-
                 <!-- Watchlist -->
                 <li class="nav-item">
                     <a class="nav-link" data-tip="Watchlist" href="{% url 'watchlist' %}">
@@ -118,7 +113,6 @@
                 </li>
                 {% endif %}
             </ul>
-
         </header>
 
         {% block body %}

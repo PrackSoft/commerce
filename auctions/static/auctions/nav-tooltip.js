@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.nav-link');
 
     navLinks.forEach(link => {
-        if (link.getAttribute('href') === currentPath) {
+        if (link.pathname === currentPath) {
             link.classList.add('active-icon');
         } else {
             link.classList.remove('active-icon');

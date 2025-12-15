@@ -25,6 +25,7 @@ html, body {
     line-height: 1;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: var(--color-primary);
+
     border: 0 solid purple;
 }
 
@@ -33,12 +34,12 @@ a { text-decoration: none; color: inherit; }
 img, svg { display: block; height: 66.666vw; margin-left: auto; margin-right: auto; }
 
 ::placeholder {
-    color: var(--color-main);
+    color: var(--color-primary);
     opacity: .5;
 }
 
 input[type=number] {
-    color: var(--color-main);
+    color: var(--color-primary);
 }
 /* -----------------------------
    LOGIN SPECIFIC STYLES (MINIMAL)
@@ -314,7 +315,7 @@ img { width: 100%; height: 100%; object-fit: contain; }
 
 .listing-detail-owner {
     display: inline-block;
-    border-bottom: 2px solid var(--color-main);
+    border-bottom: 2px solid var(--color-primary);
     padding-bottom: 1.385vw;
     font-weight: 700;
     margin: 0;
@@ -335,8 +336,8 @@ img { width: 100%; height: 100%; object-fit: contain; }
     position: relative;
     width: 100%;
     height: 2.777vw;
-    color: var(--color-main);
-    background-color: var(--color-main);
+    color: var(--color-primary);
+    background-color: var(--color-primary);
     cursor: pointer;
 }
 
@@ -345,15 +346,15 @@ img { width: 100%; height: 100%; object-fit: contain; }
     height: 2.777vw;
 }
 
-.listing-detail-button:hover .icon path { fill: var(--color-background); }
+.listing-detail-button:hover .icon path { fill: var(--color-quaternary); }
 .listing-detail-button:hover::after {
     content: attr(data-tip);
     position: absolute;
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
-    background: var(--color-main);
-    color: var(--color-background);
+    background: var(--color-primary);
+    color: var(--color-quaternary);
     padding: 4px 6px;
     font-size: 12px;
     white-space: nowrap;
@@ -391,7 +392,7 @@ input[type=number] { -moz-appearance: textfield; }
 .comments-text:focus,
 form input:focus,
 form textarea:focus {
-    outline: 3px solid var(--color-main) !important;
+    outline: 3px solid var(--color-primary) !important;
     box-shadow: none !important;
 }
 
@@ -402,19 +403,19 @@ form textarea:focus {
     align-items: center;
     width: 100%;
     height: 2.777vw;
-    fill: var(--color-main);
+    fill: var(--color-primary);
     margin: 0;
     border: 0 solid red;
 }
 
 form { display: flex; flex-direction: column; gap: 12px; }
-.comment-owner { background-color: var(--color-background); }
-.comment-user { background-color: var(--color-main); }
+.comment-owner { background-color: var(--color-quaternary); }
+.comment-user { background-color: var(--color-primary); }
 
 /* Won message */
 .won-message {
     padding: 12px;
-    color: var(--color-background);
+    color: var(--color-quaternary);
     border-radius: 12px;
-    background-color: var(--color-main);
+    background-color: var(--color-primary);
 }
