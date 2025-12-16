@@ -1,29 +1,31 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<div class="index-listings-grid">
-    {% for listing in listings %}
-    <a class="index-listings-link" href="{% url 'listing_detail' listing.id %}">
-        <div class="index-listings-container">
-            {% if listing.image_url %}
-                <img src="{{ listing.image_url }}" alt="{{ listing.title }}">
-            {% endif %}
-            <h5 class="index-listings-title">{{ listing.title }}</h5>
-            <div class="index-listings-description">
-                <p class="clase-justificada">{{ listing.description }}</p>
-            </div>
-            <h5 class="listing-price">
-                {% if listing.has_bids %}
-                    Now: ${{ listing.current_price }}
-                {% else %}
-                    From: ${{ listing.starting_bid }}
+<main class="container">
+    <div class="index-listings-grid">
+        {% for listing in listings %}
+        <a class="index-listings-link" href="{% url 'listing_detail' listing.id %}">
+            <div class="index-listings-container">
+                {% if listing.image_url %}
+                    <img src="{{ listing.image_url }}" alt="{{ listing.title }}">
                 {% endif %}
-            </h5>
-        </div>
-    </a>
-    {% empty %}
-        <p>No active listings at the moment.</p>
-    {% endfor %}
-</div>
+                <h5 class="index-listings-title">{{ listing.title }}</h5>
+                <div class="index-listings-description">
+                    <p class="clase-justificada">{{ listing.description }}</p>
+                </div>
+                <h5 class="listing-price">
+                    {% if listing.has_bids %}
+                        Now: ${{ listing.current_price }}
+                    {% else %}
+                        From: ${{ listing.starting_bid }}
+                    {% endif %}
+                </h5>
+            </div>
+        </a>
+        {% empty %}
+            <p>No active listings at the moment.</p>
+        {% endfor %}
+    </div>
+</main>
 {% endblock %}
 
