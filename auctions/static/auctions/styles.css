@@ -33,8 +33,11 @@ html, body {
 
 ul { list-style: none; }
 a { text-decoration: none; color: inherit; }
-img, svg { display: block; height: 66.666vw; margin-left: auto; margin-right: auto; }
-
+img, svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
 ::placeholder {
     color: var(--color-primary);
     opacity: .5;
@@ -167,15 +170,7 @@ header .isotype-icon-size {
 /* ------------------------------
                 MAIN
    ------------------------------ */
-/* Login | Register */
-.container {
-    display: flex;
-    justify-content:center;
-    width: 100vw;
-    height: 38vw;
 
-    border: 0 solid purple;
-}
 
 .middle-col {
     width: 33.333vw;
@@ -255,73 +250,99 @@ input:-webkit-autofill:focus {
 }
 
 
-/* INDEX LISTINGS */
-.index-listings-grid {
+/* INDEX */
+main {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    box-sizing: border-box;
-    border: 0 solid red;
+    grid-template-columns: repeat(auto-fill, minmax(21.3124rem, 1fr));
+    width: 100%;
+
+    border: 2px solid purple;
 }
 
-.index-listings-link:hover,
-.index-listings-link:focus,
-.index-listings-link:visited,
-.index-listings-link:active { text-decoration: none; }
+.index-link:hover,
+.index-link:focus,
+.index-link:visited,
+.index-link:active { text-decoration: none; }
 
-.index-listings-container {
+.index-card {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     width: auto;
-    height: 50vw;
-    background-color: var(--color-quaternary);
     padding: 2.777vw;
-    border: 0 solid orange;
-}
-.index-listings-container:hover { background-color: var(--color-tertiary); }
+    gap: 2.777vw;
+    background-color: var(--color-tertiary);
 
-.index-listings-container img {
+    border: 2px solid orange;
+}
+.index-card:hover { background-color: var(--color-tertiary); }
+
+.index-box-image {
     width: 100%;
-    height: 25vw;
-    object-fit: cover;
-    display: block;
-    margin-bottom: 0;
+    aspect-ratio: 1 / 1;
+
+    border: 2px solid blue;
 }
 
-.index-listings-title {
+.index-box-image img {
+    object-fit: contain;
+    margin-bottom: 0;
+    box-sizing: border-box;
+
+    border: 2px solid red;
+}
+
+.index-box-description {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: .5rem;
+
+    border: 2px solid blue;
+}
+
+.index-title {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
-    width: 27.779vw;
+    width: auto;
+    height: 2.1rem; 
     font-weight: 600;
-    border: 0 solid blue;
+
+    border: 0 solid red;
 }
 
-.index-listings-description {
+.index-box-text {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 4;
     overflow: hidden;
-    width: 27.779vw;
     font-weight: 200;
-    height: 5.331vw;
-    border: 0 solid blue;
+    width: auto;
+    height: 4.1rem;
+
+    border: 0 solid red;
+}
+.index-text-justify { 
+    text-align: justify; 
+    text-justify: inter-word; 
+    hyphens: auto;
 }
 
-.clase-justificada { text-align: justify; text-justify: inter-word; hyphens: auto; }
-.listing-price {
+.index-price {
     display: flex;
     align-items: flex-end;
     font-weight: 600;
     color: var(--color-primary);
-    height: 1.777vw;
-    border: 0 solid blue;
+    height: 1.15rem;
+
+    border: 0 solid red;
 }
 
 /* GRID RESPONSIVO LISTINGS */
-@media (max-width: 62rem) { .index-listings-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 48rem) { .index-listings-grid { grid-template-columns: 1fr; } }
+/*@media (max-width: 62rem) { .index-listings-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 48rem) { .index-listings-grid { grid-template-columns: 1fr; } }*/
 
 
 /* LISTING DETAIL */
