@@ -1,7 +1,7 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <div class="center-col">
+    <main class="container">
 
         <div class="middle-col">
             {% if message %}    <!-- Displays feedback messages conditionally to inform the user of errors or status updates. -->
@@ -23,5 +23,5 @@
             Don't have an account? <a href="{% url 'register' %}">Register here.</a>    <!-- Includes a link to the registration page for users who do not yet have an account, enhancing navigation. -->
         </div>
 
-    </div>
+    </main>
 {% endblock %}
