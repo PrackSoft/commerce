@@ -55,7 +55,7 @@ header {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: clamp(15vw, calc(25vw - 3.333vw), 20vw); /* mínimo, ideal según viewport, máximo */
+    height: clamp(20vw, calc(30vw - 3.333vw), 33vw); /* mínimo, ideal según viewport, máximo */
     margin: 0;
     background-color: var(--color-primary);
     padding: clamp(1vw, 2.777vw, 3vw); /* adaptable con límite */
@@ -63,19 +63,30 @@ header {
 
     border: 0 solid purple;
 }
-
 .isotype-box {
     display: flex;
-    align-items: center; /* centra verticalmente los hijos */
-    width: clamp(25vw, 30.333vw + 3.333vw, 40vw);
+    align-items: center;
+    justify-content: center;
+    width: 500px; /* tamaño fijo que no cambia */
+    height: 500px;
+    min-width: 500px; /* fuerza a no achicarse */
+    max-width: 500px; /* fuerza a no agrandarse */
 
-    border: 0 solid orange;
+    border: 2px solid orange;
 }
+/*.isotype-box {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center; /* centra verticalmente los hijos */
+    /*width: clamp(25vw, 30.333vw + 3.333vw, 40vw);
+    min-width: 33vw;
+    border: 0 solid orange;
+}*/
 
 header h1 {
     margin: 0;
     font-family: "Major Mono Display", monospace;
-    font-size: clamp(2.1rem, 2.3rem + 3.333vw, 7.556rem); /* min, preferido, max */
+    font-size: clamp(88px, 2.3rem + 3.333vw, 7.556rem); /* min, preferido, max */
     font-weight: 900;
     letter-spacing: -.3rem;
     line-height: 1.1;
@@ -87,10 +98,10 @@ header h1 {
 
 
 header .isotype-icon-size {
-    width: clamp(1.333rem, 1.333rem + 3.333vw, 5.999rem);
-    height: clamp(4vw, 5.93vw, 7vw);
+    width: clamp(88px, 1.333rem + 3.333vw, 5.999rem);
+    height: clamp(88px, 5.93vw, 7vw);
 
-    border: 0 solid red;
+    border: 2px solid red;
 }
 
 .user-greeting {
