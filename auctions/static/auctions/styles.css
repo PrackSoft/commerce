@@ -55,10 +55,10 @@ header {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: clamp(20vw, calc(30vw - 3.333vw), 33vw); /* mínimo, ideal según viewport, máximo */
+    height: 300px; /* mínimo, ideal según viewport, máximo */
     margin: 0;
     background-color: var(--color-primary);
-    padding: clamp(1vw, 2.777vw, 3vw); /* adaptable con límite */
+    padding: 40px;
     gap: clamp(1vw, 2vw, 3vw);
 
     border: 0 solid purple;
@@ -67,26 +67,18 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 500px; /* tamaño fijo que no cambia */
-    height: 500px;
-    min-width: 500px; /* fuerza a no achicarse */
-    max-width: 500px; /* fuerza a no agrandarse */
+    width: 480px; /* tamaño fijo que no cambia */
+    height: 120px;
+    min-width: 480px; /* fuerza a no achicarse */
+    max-width: 480px; /* fuerza a no agrandarse */
 
-    border: 2px solid orange;
-}
-/*.isotype-box {
-    display: flex;
-    flex-shrink: 0;
-    align-items: center; /* centra verticalmente los hijos */
-    /*width: clamp(25vw, 30.333vw + 3.333vw, 40vw);
-    min-width: 33vw;
     border: 0 solid orange;
-}*/
+}
 
 header h1 {
     margin: 0;
     font-family: "Major Mono Display", monospace;
-    font-size: clamp(88px, 2.3rem + 3.333vw, 7.556rem); /* min, preferido, max */
+    font-size: 85px; /* min, preferido, max */
     font-weight: 900;
     letter-spacing: -.3rem;
     line-height: 1.1;
@@ -98,10 +90,10 @@ header h1 {
 
 
 header .isotype-icon-size {
-    width: clamp(88px, 1.333rem + 3.333vw, 5.999rem);
-    height: clamp(88px, 5.93vw, 7vw);
+    width: 70px;
+    height: 90px;
 
-    border: 2px solid red;
+    border: 0 solid red;
 }
 
 .user-greeting {
@@ -110,12 +102,14 @@ header .isotype-icon-size {
     justify-content: center;
     background-color: var(--color-tertiary);
     width: 100%;
-    height: clamp(2vw, 2.777vw, 3vw);
+    height: 40px;
+    min-height: 40px;
+    max-height: 40px;
     color: var(--color-primary);
-    padding: clamp(0.2vw, 0.5vw, 1vw);
+    /*padding: clamp(0.2vw, 0.5vw, 1vw);*/
     border-radius: clamp(5vw, 11.111vw, 12vw);
     margin: 0;
-    font-size: clamp(0.8vw, 1.388vw, 1.5vw);
+    font-size: 1.5rem;
 }
 .user-greeting strong { 
     font-weight: 700; 
@@ -124,7 +118,8 @@ header .isotype-icon-size {
 .nav-box {
     display: flex;
     flex-wrap: nowrap;
-    width: clamp(25vw, 33.333vw, 40vw);
+    width: 480px;
+    height: 50px;
     justify-content: space-between;
     list-style: none;
 
@@ -149,8 +144,8 @@ header .isotype-icon-size {
 
 .navbar-icon-size {
     display: block;
-    width: clamp(2vw, 2.777vw, 3vw);
-    height: clamp(2vw, 2.777vw, 3vw);
+    width: 40px;
+    height: 40px;
     margin: 0;
     padding: 0;
 }
@@ -267,7 +262,7 @@ main {
     grid-template-columns: repeat(auto-fill, minmax(21.3124rem, 1fr));
     width: 100%;
 
-    border: 2px solid purple;
+    border: 0 solid purple;
 }
 
 .index-link:hover,
@@ -280,11 +275,11 @@ main {
     flex-direction: column;
     justify-content: flex-start;
     width: auto;
-    padding: 2.777vw;
+    padding: 40px;
     gap: 2.777vw;
-    background-color: var(--color-tertiary);
+    background-color: var(--color-quaternary);
 
-    border: 2px solid orange;
+    border: 0 solid orange;
 }
 .index-card:hover { background-color: var(--color-tertiary); }
 
@@ -292,7 +287,7 @@ main {
     width: 100%;
     aspect-ratio: 1 / 1;
 
-    border: 2px solid blue;
+    border: 0 solid blue;
 }
 
 .index-box-image img {
@@ -300,7 +295,7 @@ main {
     margin-bottom: 0;
     box-sizing: border-box;
 
-    border: 2px solid red;
+    border: 0 solid red;
 }
 
 .index-box-description {
@@ -309,7 +304,7 @@ main {
     width: 100%;
     gap: .5rem;
 
-    border: 2px solid blue;
+    border: 0 solid blue;
 }
 
 .index-title {
