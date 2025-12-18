@@ -169,14 +169,21 @@ header .isotype-icon-size {
 }
 
 /* GRID RESPONSIVO HEADER */
-@media (max-width: 62rem) { header { grid-template-columns: 1fr auto; } }
-@media (max-width: 48rem) { header { grid-template-columns: 1fr; } }
+/*@media (max-width: 62rem) { header { grid-template-columns: 1fr auto; } }
+@media (max-width: 48rem) { header { grid-template-columns: 1fr; } }*/
 
 
 /* ------------------------------
                 MAIN
    ------------------------------ */
+.main-middle-col {
+    display: flex;
+    justify-content:center;
+    width: 100vw;
+    height: 38vw;
 
+    border: 0 solid purple;
+}
 
 .middle-col {
     width: 33.333vw;
