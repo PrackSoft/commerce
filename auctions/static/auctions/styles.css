@@ -55,11 +55,12 @@ header {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 300px; /* mínimo, ideal según viewport, máximo */
+    height: 300px;
     margin: 0;
     background-color: var(--color-primary);
     padding: 40px;
-    gap: clamp(1vw, 2vw, 3vw);
+    /*gap: clamp(1vw, 2vw, 3vw);*/
+    gap: 40px;
 
     border: 0 solid purple;
 }
@@ -178,37 +179,40 @@ header .isotype-icon-size {
    ------------------------------ */
 .main-middle-col {
     display: flex;
+    flex-direction: column;
     justify-content:center;
-    width: 100vw;
-    height: 38vw;
+    align-items: center;
+    width: 100%;
+    padding: 40px;
 
     border: 0 solid purple;
 }
 
-.middle-col {
-    width: 33.333vw;
+.middle-col-box {
     display: flex;
     flex-direction: column;
     align-items: center; /* centra horizontalmente */
-    padding: 1.333vw 0;
-    gap: .333vw; /* opcional, espacio entre elementos */
+    width: 480px;
+    min-width: 480px;
+    max-width: 480px;
+    gap: .5rem;
 
     border: 0 solid orange;
 }
 
-.middle-col form {
+.middle-col-box form {
     width: 100%;
     max-width: 33.333vw;
     display: flex;
     flex-direction: column;
-    gap: 1.333vw;
-    margin: 1.333vw 0;
+    gap: 40px;
+    margin: 0 0 40px 0;
 
     border: 0 solid red;
 }
 
 /* Inputs*/
-.middle-col input.form-control {
+.middle-col-box input.form-control {
     width: 100%;
     height: 2.777vw;
     padding: 0 2.666vw;
@@ -221,12 +225,12 @@ header .isotype-icon-size {
 
 }
 /* Placeholder*/
-.middle-col input.form-control::placeholder {
+.middle-col-box input.form-control::placeholder {
     color: var(--color-primary);
     opacity: 0.5;
 }
 /* Check here */
-.middle-col input.form-control:focus {
+.middle-col-box input.form-control:focus {
     outline: .188rem solid var(--color-primary);
     background-color: var(--color-quaternary);
 }
@@ -243,7 +247,7 @@ input:-webkit-autofill:focus {
 }
 
 /* Button */
-.middle-col input.btn {
+.middle-col-box input.btn {
     width: 100%;
     height: 2.777vw;
     padding: .5rem;
@@ -252,14 +256,14 @@ input:-webkit-autofill:focus {
     border: none;
     cursor: pointer;
 }
-.middle-col input.btn:hover {
+.middle-col-box input.btn:hover {
     color: var(--color-quaternary);
     font-weight: 600;
 }
-.middle-col a:hover {
+.middle-col-box a:hover {
     text-decoration-line: underline;
     text-decoration-style: dotted;
-    text-underline-offset: 2.666rem;
+    text-underline-offset: .5rem;
 }
 
 
