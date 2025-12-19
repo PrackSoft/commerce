@@ -1,7 +1,8 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<div class="listings-grid">
+<main class="listings-flex">
+    <!--<div class="listings-grid">-->
     {% if listings|length == 0 %}
         {% if mode == "watchlist" %}
             <p>You have no items in your watchlist.</p>
@@ -13,49 +14,55 @@
     {% endif %}
 
     {% for listing in listings %}
-        <a class="listing-link" href="{% url 'listing_detail' listing.id %}">
-            <div class="listing-item">
-                <h3>{{ listing.title }}</h3>
+    <a class="index-link" href="{% url 'listing_detail' listing.id %}">
+        <div class="listings-card">
+                {% if listing.image_url %}
+                    <div class="listings-box-image">
+                        <img src="{{ listing.image_url }}" alt="{{ listing.title }}" class="listing-picture">
+                    </div>
+                {% endif %}
 
-                {% if listing.status_message %}
-                    <p>{{ listing.status_message }}</p>
-                {% else %}
-                    {% if listing.is_active %}
-                        <p>Current price: ${{ listing.current_price }}</p>
+                <div class="index-box-description">
+                    {% if listing.status_message %}
+                        <p>{{ listing.status_message }}</p>
                     {% else %}
-                        {% if mode == "my_listings" %}
-                            <p>Status: Closed</p>
-                        {% else %}
+                        {% if listing.is_active %}
                             <p>Current price: ${{ listing.current_price }}</p>
+                        {% else %}
+                            {% if mode == "my_listings" %}
+                                <p>Status: Closed</p>
+                            {% else %}
+                                <p>Current price: ${{ listing.current_price }}</p>
+                            {% endif %}
                         {% endif %}
                     {% endif %}
-                {% endif %}
-
-                {% if mode != "category" %}
-                    <p>{{ listing.description }}</p>
-                {% endif %}
-
-                {% if listing.image_url %}
-                    <img src="{{ listing.image_url }}" alt="{{ listing.title }}" class="listing-picture">
-                {% endif %}
-
-                {% if mode in "my_purchases watchlist" %}
-                    <form action="{% url 'remove_listing_from_mode' listing.id %}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="mode" value="{{ mode }}">
-                        <button type="submit">Remove from 
-                        {% if mode == "my_purchases" %}
-                            My Purchases
-                        {% elif mode == "watchlist" %}
-                            Watchlist
+                    
+                    <h5 class="index-title">{{ listing.title }}</h5>
+                    <div class="index-box-text">
+                        {% if mode != "category" %}
+                            <p class="index-text-justify">{{ listing.description }}</p>
                         {% endif %}
-                        </button>
-                    </form>
-                {% endif %}
-            </div>
-        </a>
+                    </div>
+
+                    
+
+                    {% if mode in "my_purchases watchlist" %}
+                        <form action="{% url 'remove_listing_from_mode' listing.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="mode" value="{{ mode }}">
+                            <button type="submit">Remove from 
+                            {% if mode == "my_purchases" %}
+                                My Purchases
+                            {% elif mode == "watchlist" %}
+                                Watchlist
+                            {% endif %}
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+        </div>
+    </a>
     {% endfor %}
-    
-</div>
+</main>
 
 {% endblock %}

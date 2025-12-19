@@ -38,6 +38,7 @@ img, svg {
     max-width: 100%;
     height: auto;
 }
+
 ::placeholder {
     color: var(--color-primary);
     opacity: .5;
@@ -267,12 +268,17 @@ input:-webkit-autofill:focus {
 
 
 /* INDEX */
-main {
+.index-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(21.3124rem, 1fr));
     width: 100%;
 
     border: 0 solid purple;
+}
+
+.index-link {
+    display: block;
+    width: 100%;
 }
 
 .index-link:hover,
@@ -356,9 +362,55 @@ main {
     border: 0 solid red;
 }
 
-/* GRID RESPONSIVO LISTINGS */
-/*@media (max-width: 62rem) { .index-listings-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 48rem) { .index-listings-grid { grid-template-columns: 1fr; } }*/
+
+
+
+
+
+
+.listings-flex {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.listings-card {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--color-quaternary);
+    gap: 10px;
+}
+
+.listings-box-image {
+    width: 100%;
+    max-width: 300px;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+    .listings-flex {
+        grid-template-columns: 1fr;
+    }
+
+    .listings-card {
+        flex-direction: column;
+    }
+
+    .listings-box-image {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+.listings-card:hover { background-color: var(--color-tertiary); }
+
+.listings-description {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* ocupa todo el espacio restante */
+}
+
 
 
 /* LISTING DETAIL */
@@ -366,8 +418,9 @@ main {
     display: grid;
     grid-template-columns: 2fr 1fr;
     box-sizing: border-box;
+    padding: 40px;
 
-    border: 0px solid red;
+    border: 2px solid purple;
 }
 
 .listing-detail-container {
@@ -376,8 +429,9 @@ main {
     align-items: flex-start;
     justify-content: center;
     background-color: var(--color-background);
-    padding: 2.777vw;
-    gap: 2.777vw;
+
+    gap: 40px;
+
     border: 2px solid orange;
 }
 
@@ -394,11 +448,10 @@ img { width: 100%; height: 100%; object-fit: contain; }
 .listing-detail-text {
     display: flex;
     flex-direction: column;
-    flex-wrap: nowrap;
     width: 27.779vw;
     gap: 2rem;
     margin: 0;
-    border: 0 solid red;
+    border: 2px solid red;
 }
 
 .listing-detail-owner {
@@ -409,12 +462,14 @@ img { width: 100%; height: 100%; object-fit: contain; }
     margin: 0;
 }
 
-.listing-detail-title { 
-    width: 27.779vw; 
+.listing-detail-title {
+    width: 27.779vw;
+    min-width: 0;
     height: 4.166vw; 
     font-weight: 700;
+    overflow-wrap: break-word;
 
-    border: 0 solid blue; }
+    border: 2px solid blue; }
 
 .listing-detail-price { 
     font-weight: 700; 
@@ -430,6 +485,7 @@ img { width: 100%; height: 100%; object-fit: contain; }
     color: var(--color-tertiary);
     background-color: var(--color-primary);
     cursor: pointer;
+    margin: 1rem 0;
 }
 
 .listing-detail-button .icon {

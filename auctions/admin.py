@@ -10,6 +10,7 @@ class ListingAdmin(admin.ModelAdmin):
     search_fields = ('title', 'description', 'owner__username', 'category')
     ordering = ('title',)
     list_display_links = ('title',)
+    list_display = ('id', 'title',)
 
 # BidAdmin
 # Shows bids with a custom boolean field listing_active to indicate if the associated listing is active, improving admin clarity.

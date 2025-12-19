@@ -1,7 +1,7 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<main>
+<main class="index-grid">
         {% for listing in listings %}
         <a class="index-link" href="{% url 'listing_detail' listing.id %}">
             <div class="index-card">
