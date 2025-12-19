@@ -16,7 +16,7 @@
 
             <!-- Logica precio actual v ganador -->
             {% if show_message %}
-                <p class="won-message">{{ message }}</p>
+                <p class="status-bid-won-message">{{ message }}</p>
             {% else %}
                 {% if has_bids %}
                     <p class="listing-detail-price">Now: ${{ current_price }} by {{ current_owner }}</p>
@@ -30,7 +30,6 @@
                     {% csrf_token %}
                     <button class="listing-detail-button" type="submit" data-tip="Close Auction">
                         <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Close Auction" focusable="false">
-                            <title>Close Auction</title>
                             <path d="M160-120v-66.67h480V-120H160Zm223.33-206L160-549.33 234.67-626 460-402.67 383.33-326Zm254-254L414-805.33 490.67-880 714-656.67 637.33-580Zm196 420L302-691.33 348.67-738 880-206.67 833.33-160Z"/>
                         </svg>
                     </button>
@@ -42,7 +41,6 @@
                     {% csrf_token %}
                     <button class="listing-detail-button" type="submit" data-tip="Remove from My Listings">
                         <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Remove from My Listings" focusable="false">
-                            <title>Remove from My Listings</title>
                             <path d="M200-446.67v-66.66h560v66.66H200Z"/>
                         </svg>
                     </button>
@@ -82,7 +80,7 @@
                     </form>
 
                     {% if error %}
-                        <p style="color:red">{{ error }}</p>
+                        <p class="status-bid-won-message">{{ error }}</p>
                     {% endif %}
                 {% endif %}
             </div>
@@ -109,7 +107,7 @@
                 </svg>
                 {% for comment in comments %}
                     <div class="comments-text {% if comment.author == listing.owner %}comment-owner{% else %}comment-user{% endif %}">
-                        {{ comment.author }}: {{ comment.text }}
+                        <strong>{{ comment.author }}</strong>: {{ comment.text }}
                     </div>
                 {% empty %}
                     <p>No comments yet.</p>

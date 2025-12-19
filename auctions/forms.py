@@ -22,8 +22,8 @@ class CommentForm(forms.ModelForm):
                 'placeholder': 'Write a comment...',
                 # padding agregado
                 'style': (
-                    'padding: .75rem; '
-                    'border-radius: .75rem; '
+                    'padding: 1.5rem; '
+                    'border-radius: 1.5rem; '
                     'width: 100%; '
                     'box-sizing: border-box; '
                     )

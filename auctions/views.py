@@ -239,7 +239,7 @@ def unified_listings(request, mode, category_name=None):
                 if listing.winner == request.user:
                     listing.status_message = "YOU WON!"
                 else:
-                    listing.status_message = "YOU DID NOT WIN"
+                    listing.status_message = "YOU DID NOT WIN."
         elif mode == "my_listings":
             listing.status_message = "Active" if listing.is_active else "Closed"
         else:

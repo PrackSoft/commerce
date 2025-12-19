@@ -31,6 +31,10 @@ html, body {
     border: 0 solid purple;
 }
 
+strong {
+    font-weight: 700;
+}
+
 ul { list-style: none; }
 a { text-decoration: none; color: inherit; }
 img, svg {
@@ -173,6 +177,33 @@ header .isotype-icon-size {
 /*@media (max-width: 62rem) { header { grid-template-columns: 1fr auto; } }
 @media (max-width: 48rem) { header { grid-template-columns: 1fr; } }*/
 
+.cards-link {
+    display: block;
+    width: 100%;
+}
+.cards-link:hover,
+.cards-link:focus,
+.cards-link:visited,
+.cards-link:active { text-decoration: none; }
+
+.status-bid-won-message {
+    position: relative;
+    height: 2rem;
+    padding: .5rem 1.5rem;
+    font-size: .9rem;
+    color: var(--color-quaternary);
+    background-color: var(--color-primary);
+    border-radius: 0;
+    clip-path: polygon(
+        0% 50%,        /* punta izquierda */
+        5% 0%,         /* esquina superior izquierda */
+        95% 0%,        /* esquina superior derecha */
+        100% 50%,      /* punta derecha */
+        95% 100%,      /* esquina inferior derecha */
+        5% 100%,       /* esquina inferior izquierda */
+        0% 50%         /* punta izquierda de nuevo */
+    );
+}
 
 /* ------------------------------
                 MAIN
@@ -267,24 +298,16 @@ input:-webkit-autofill:focus {
 }
 
 
+
+
 /* INDEX */
-.index-grid {
+.index-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(21.3124rem, 1fr));
     width: 100%;
 
     border: 0 solid purple;
 }
-
-.index-link {
-    display: block;
-    width: 100%;
-}
-
-.index-link:hover,
-.index-link:focus,
-.index-link:visited,
-.index-link:active { text-decoration: none; }
 
 .index-card {
     display: flex;
@@ -367,19 +390,36 @@ input:-webkit-autofill:focus {
 
 
 
-
-.listings-flex {
+/* UNIFIED LISTINGS */
+.listings-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
 }
+.listings-container > * {
+    min-width: 0;
+}
+
 
 .listings-card {
     display: flex;
     flex-direction: row;
+    width: 100%;
     background-color: var(--color-quaternary);
-    gap: 10px;
+    padding: 40px;
+    gap: 40px;
+
+    border: 0 solid orange;
 }
+.listings-card * {
+    min-width: 0;
+}
+.listings-card h5,
+.listings-card p,
+.listings-card div {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+.listings-card:hover { background-color: var(--color-tertiary); }
 
 .listings-box-image {
     width: 100%;
@@ -388,8 +428,23 @@ input:-webkit-autofill:focus {
     flex-shrink: 0;
 }
 
-@media (max-width: 768px) {
-    .listings-flex {
+.listings-description {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* ocupa todo el espacio restante */
+}
+
+@media (max-width: 1200px) {
+    .listings-container {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 640px) {
+    .listings-container {
         grid-template-columns: 1fr;
     }
 
@@ -403,14 +458,6 @@ input:-webkit-autofill:focus {
     }
 }
 
-.listings-card:hover { background-color: var(--color-tertiary); }
-
-.listings-description {
-    display: flex;
-    flex-direction: column;
-    flex: 1; /* ocupa todo el espacio restante */
-}
-
 
 
 /* LISTING DETAIL */
@@ -420,7 +467,7 @@ input:-webkit-autofill:focus {
     box-sizing: border-box;
     padding: 40px;
 
-    border: 2px solid purple;
+    border: 0 solid purple;
 }
 
 .listing-detail-container {
@@ -432,7 +479,7 @@ input:-webkit-autofill:focus {
 
     gap: 40px;
 
-    border: 2px solid orange;
+    border: 0 solid orange;
 }
 
 .listing-detail-image {
@@ -451,7 +498,7 @@ img { width: 100%; height: 100%; object-fit: contain; }
     width: 27.779vw;
     gap: 2rem;
     margin: 0;
-    border: 2px solid red;
+    border: 0 solid red;
 }
 
 .listing-detail-owner {
@@ -469,7 +516,8 @@ img { width: 100%; height: 100%; object-fit: contain; }
     font-weight: 700;
     overflow-wrap: break-word;
 
-    border: 2px solid blue; }
+    border: 0 solid blue; 
+}
 
 .listing-detail-price { 
     font-weight: 700; 
@@ -481,16 +529,19 @@ img { width: 100%; height: 100%; object-fit: contain; }
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 2.777vw;
+    height: 40px;
     color: var(--color-tertiary);
     background-color: var(--color-primary);
     cursor: pointer;
     margin: 1rem 0;
+
+    border: 0 solid red;
 }
 
 .listing-detail-button .icon {
     width: 2.777vw;
-    height: 2.777vw;
+    height: 40px;
+    min-height: 40px;
 }
 
 .listing-detail-button:hover .icon path { fill: var(--color-quaternary); }
@@ -515,7 +566,7 @@ img { width: 100%; height: 100%; object-fit: contain; }
     flex-direction: column;
     width: 100%;
     gap: .5rem;
-    border: 2px solid red;
+    border: 0 solid red;
 }
 
 /* Eliminar flechas del bid */
@@ -523,16 +574,25 @@ input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 input[type=number] { -moz-appearance: textfield; }
 
-.listing-detail-bid-container { display: flex; flex-direction: column; align-items: stretch; width: 100%; }
+.listing-detail-bid-container { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: stretch; 
+    width: 100%;
+}
+
+.listing-detail-bid {
+    height: 1rem;
+}
 
 .listing-detail-bid,
 .listing-detail-textarea textarea,
 .comments-text {
     display: flex;
     width: 100%;
-    padding: .75rem;
+    padding: 1.5rem 2rem;
     box-sizing: border-box;
-    border-radius: .75rem;
+    border-radius: 1.5rem;
     outline: none;
     background-color: var(--color-tertiary);
 }
@@ -563,6 +623,7 @@ form textarea:focus {
     height: 2.777vw;
     fill: var(--color-primary);
     margin: 0;
+
     border: 0 solid red;
 }
 
@@ -570,10 +631,16 @@ form { display: flex; flex-direction: column; gap: .25rem; }
 .comment-owner { background-color: var(--color-primary); color: var(--color-tertiary)}
 .comment-user { background-color: var(--color-tertiary); }
 
-/* Won message */
-.won-message {
-    padding: .25rem;
-    color: var(--color-quaternary);
-    border-radius: .25rem;
-    background-color: var(--color-primary);
+
+/* CATEGORY */
+.category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: "Major Mono Display", monospace;
+    font-size: 2.5rem;
+    font-weight: 900;
+    padding: 40px 40px 0 40px;
+    border: 2px solid red;
 }
+

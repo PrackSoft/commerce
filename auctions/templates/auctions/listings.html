@@ -1,7 +1,7 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<main class="listings-flex">
+<main class="listings-container">
     <!--<div class="listings-grid">-->
     {% if listings|length == 0 %}
         {% if mode == "watchlist" %}
@@ -14,7 +14,7 @@
     {% endif %}
 
     {% for listing in listings %}
-    <a class="index-link" href="{% url 'listing_detail' listing.id %}">
+    <a class="cards-link" href="{% url 'listing_detail' listing.id %}">
         <div class="listings-card">
                 {% if listing.image_url %}
                     <div class="listings-box-image">
@@ -24,7 +24,7 @@
 
                 <div class="index-box-description">
                     {% if listing.status_message %}
-                        <p>{{ listing.status_message }}</p>
+                        <p class="status-bid-won-message">{{ listing.status_message }}</p>
                     {% else %}
                         {% if listing.is_active %}
                             <p>Current price: ${{ listing.current_price }}</p>
@@ -50,11 +50,15 @@
                         <form action="{% url 'remove_listing_from_mode' listing.id %}" method="post">
                             {% csrf_token %}
                             <input type="hidden" name="mode" value="{{ mode }}">
-                            <button type="submit">Remove from 
+                            <button class="listing-detail-button" type="submit" data-tip="Remove from {% if mode == 'my_purchases' %}My Purchases{% elif mode == 'watchlist' %}Watchlist{% endif %}">
                             {% if mode == "my_purchases" %}
-                                My Purchases
+                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Remove from My Purchases" focusable="false">
+                                <path d="M200-446.67v-66.66h560v66.66H200Z"/>
+                                </svg>
                             {% elif mode == "watchlist" %}
-                                Watchlist
+                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Remove from My Watchlist" focusable="false">
+                                <path d="M200-446.67v-66.66h560v66.66H200Z"/>
+                                </svg>
                             {% endif %}
                             </button>
                         </form>
