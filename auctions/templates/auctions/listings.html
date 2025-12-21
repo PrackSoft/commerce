@@ -29,9 +29,7 @@
                         {% endif %}                        
                         <h5 class="listings-title">{{ listing.title }}</h5>
                         <div class="listings-box-text">
-                            {% if mode != "category" %}
-                                <p class="listings-text-justify">{{ listing.description }}</p>
-                            {% endif %}
+                            <p class="listings-text-justify">{{ listing.description }}</p>
                         </div>
                         <h5 class="index-price">Now: ${{ listing.current_price }}</p>
                     </div>

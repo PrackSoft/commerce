@@ -234,22 +234,27 @@ def unified_listings(request, mode, category_name=None):
     for listing in listings:
         if mode in ["my_purchases", "watchlist"]:
             if listing.is_active:
-                listing.status_message = f"Active"
+                listing.status_message = "Active"
             else:
-                if listing.winner == request.user:
-                    listing.status_message = "YOU WON!"
-                else:
-                    listing.status_message = "YOU DID NOT WIN."
+                listing.status_message = "YOU WON!" if listing.winner == request.user else "YOU DID NOT WIN."
         elif mode == "my_listings":
             listing.status_message = "Active" if listing.is_active else "Closed"
-        else:
-            listing.status_message = ""
+        elif mode == "category":
+            # Check if user made a bid
+            has_bid = listing.bids.filter(bidder=request.user).exists()
+            if has_bid:
+                listing.status_message = "Biding"
+            else:
+                # Check if user is watching
+                is_watching = listing.watchlist_entries.filter(user=request.user).exists()
+                listing.status_message = "Watching" if is_watching else ""
 
     return render(request, "auctions/listings.html", {
         "listings": listings,
         "mode": mode,
         "category_name": category_name,
     })
+
 
 
 @login_required
