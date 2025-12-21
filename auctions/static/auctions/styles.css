@@ -297,7 +297,42 @@ input:-webkit-autofill:focus {
     text-underline-offset: .5rem;
 }
 
+.middle-col-box textarea.form-control {
+    width: 100%;
+    min-height: 120px; /* ajusta según necesidad */
+    padding: 1rem 1.5rem;
+    background-color: var(--color-tertiary);
+    color: var(--color-primary);
+    border: none;
+    border-radius: 20px;
+    box-sizing: border-box;
+    outline: none;
+}
 
+.middle-col-box textarea.form-control:focus {
+    background-color: var(--color-quaternary);
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+}
+
+.middle-col-box select.form-control {
+    width: 100%;
+    height: 40px;
+    padding: 0 1rem;
+    background-color: var(--color-tertiary);
+    color: var(--color-primary);
+    border: none;
+    border-radius: 20px;
+    box-sizing: border-box;
+    outline: none;
+    appearance: none; /* elimina flecha nativa si quieres personalizarla */
+}
+
+.middle-col-box select.form-control:focus {
+    background-color: var(--color-quaternary);
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+}
 
 
 /* INDEX */
@@ -545,7 +580,7 @@ input:-webkit-autofill:focus {
 .listing-detail-image {
     width: 63.889vw;
     height: 63.889vw;
-    background-color: var(--color-tertiary);
+    background-color: var(--color-quaternary);
     overflow: hidden;
     border: 0px solid red;
 }

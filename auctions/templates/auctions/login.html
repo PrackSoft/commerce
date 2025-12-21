@@ -10,7 +10,6 @@
             <!-- Uses a POST method with CSRF protection to securely submit login credentials. -->
             <form action="{% url 'login' %}" method="post">
                 {% csrf_token %}
-                <!-- Applies Bootstrap classes (form-control and btn btn-primary) for consistent styling and responsive design. -->
                 <div class="form-group">
                     <input autofocus class="form-control" type="text" name="username" placeholder="Username">   <!-- Autofocuses the username field to improve usability. -->
                 </div>
