@@ -38,7 +38,7 @@
                             <form action="{% url 'remove_listing_from_mode' listing.id %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="mode" value="{{ mode }}">
-                                <button class="listings-detail-button" type="submit" data-tip="Remove from {% if mode == 'my_purchases' %}My Purchases{% elif mode == 'watchlist' %}Watchlist{% endif %}">
+                                <button class="listing-detail-button" type="submit" data-tip="Remove from {% if mode == 'my_purchases' %}My Purchases{% elif mode == 'watchlist' %}Watchlist{% endif %}">
                                 {% if mode == "my_purchases" %}
                                     <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Remove from My Purchases" focusable="false">
                                     <path d="M200-446.67v-66.66h560v66.66H200Z"/>

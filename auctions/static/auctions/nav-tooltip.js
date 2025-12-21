@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const currentPath = window.location.pathname;
-    const navLinks = document.querySelectorAll('.nav-link');
+    const navLinks = document.querySelectorAll('.navbar-link');
 
     navLinks.forEach(link => {
         if (link.pathname === currentPath) {

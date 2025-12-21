@@ -7,11 +7,11 @@ class ListingForm(forms.ModelForm):
         model = Listing
         fields = ["title", "description", "starting_bid", "image_url", "category"]
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Description'}),
-            'starting_bid': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Starting Bid'}),
-            'image_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Image URL'}),
-            'category': forms.Select(attrs={'class': 'form-control'}),
+            'title': forms.TextInput(attrs={'class': 'middle-col-app-input', 'placeholder': 'Title'}),
+            'description': forms.Textarea(attrs={'class': 'middle-col-app-input', 'placeholder': 'Description'}),
+            'starting_bid': forms.NumberInput(attrs={'class': 'middle-col-app-input', 'placeholder': 'Starting Bid'}),
+            'image_url': forms.URLInput(attrs={'class': 'middle-col-app-input', 'placeholder': 'Image URL'}),
+            'category': forms.Select(attrs={'class': 'middle-col-app-input'}),
         }
 
 class CommentForm(forms.ModelForm):
