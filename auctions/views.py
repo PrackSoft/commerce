@@ -243,7 +243,7 @@ def unified_listings(request, mode, category_name=None):
             # Check if user made a bid
             has_bid = listing.bids.filter(bidder=request.user).exists()
             if has_bid:
-                listing.status_message = "Biding"
+                listing.status_message = "Bidding"
             else:
                 # Check if user is watching
                 is_watching = listing.watchlist_entries.filter(user=request.user).exists()
