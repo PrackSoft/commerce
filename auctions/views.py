@@ -234,7 +234,7 @@ def unified_listings(request, mode, category_name=None):
     for listing in listings:
         if mode in ["my_purchases", "watchlist"]:
             if listing.is_active:
-                listing.status_message = f"Current price: ${listing.current_price}"
+                listing.status_message = f"Active"
             else:
                 if listing.winner == request.user:
                     listing.status_message = "YOU WON!"
@@ -257,15 +257,22 @@ def remove_listing_from_mode(request, listing_id):
     mode = request.POST.get("mode")
     listing = Listing.objects.get(pk=listing_id)
 
+    # Manejar eliminación según modo
     if mode == "watchlist":
+        # Elimina si existe; si no, no pasa nada
         Watchlist.objects.filter(user=request.user, listing=listing).delete()
 
     elif mode == "my_purchases":
+        # Marca como eliminado si no existe
         RemovedPurchase.objects.get_or_create(user=request.user, listing=listing)
 
+    # Redirección segura: siempre retorna HttpResponse
     if mode == "watchlist":
         return redirect("watchlist")
     elif mode == "my_listings":
         return redirect("my_listings")
     elif mode == "my_purchases":
         return redirect("my_purchases")
+    else:
+        # Modo inesperado o listing propio en watchlist
+        return redirect("index")  # o cualquier página segura

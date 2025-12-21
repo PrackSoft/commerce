@@ -22,47 +22,38 @@
                     </div>
                 {% endif %}
 
-                <div class="index-box-description">
-                    {% if listing.status_message %}
-                        <p class="status-bid-won-message">{{ listing.status_message }}</p>
-                    {% else %}
-                        {% if listing.is_active %}
-                            <p>Current price: ${{ listing.current_price }}</p>
-                        {% else %}
-                            {% if mode == "my_listings" %}
-                                <p>Status: Closed</p>
-                            {% else %}
-                                <p>Current price: ${{ listing.current_price }}</p>
+                <div class="listings-box-description">
+                    <div>
+                        {% if listing.status_message %}
+                            <p class="status-bid-won-message">{{ listing.status_message }}</p>
+                        {% endif %}                        
+                        <h5 class="listings-title">{{ listing.title }}</h5>
+                        <div class="listings-box-text">
+                            {% if mode != "category" %}
+                                <p class="listings-text-justify">{{ listing.description }}</p>
                             {% endif %}
-                        {% endif %}
-                    {% endif %}
-                    
-                    <h5 class="index-title">{{ listing.title }}</h5>
-                    <div class="index-box-text">
-                        {% if mode != "category" %}
-                            <p class="index-text-justify">{{ listing.description }}</p>
+                        </div>
+                        <h5 class="index-price">Now: ${{ listing.current_price }}</p>
+                    </div>
+                    <div>
+                        {% if mode in "my_purchases watchlist" %}
+                            <form action="{% url 'remove_listing_from_mode' listing.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="mode" value="{{ mode }}">
+                                <button class="listings-detail-button" type="submit" data-tip="Remove from {% if mode == 'my_purchases' %}My Purchases{% elif mode == 'watchlist' %}Watchlist{% endif %}">
+                                {% if mode == "my_purchases" %}
+                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Remove from My Purchases" focusable="false">
+                                    <path d="M200-446.67v-66.66h560v66.66H200Z"/>
+                                    </svg>
+                                {% elif mode == "watchlist" %}
+                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Remove from My Watchlist" focusable="false">
+                                    <path d="M200-446.67v-66.66h560v66.66H200Z"/>
+                                    </svg>
+                                {% endif %}
+                                </button>
+                            </form>
                         {% endif %}
                     </div>
-
-                    
-
-                    {% if mode in "my_purchases watchlist" %}
-                        <form action="{% url 'remove_listing_from_mode' listing.id %}" method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="mode" value="{{ mode }}">
-                            <button class="listing-detail-button" type="submit" data-tip="Remove from {% if mode == 'my_purchases' %}My Purchases{% elif mode == 'watchlist' %}Watchlist{% endif %}">
-                            {% if mode == "my_purchases" %}
-                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Remove from My Purchases" focusable="false">
-                                <path d="M200-446.67v-66.66h560v66.66H200Z"/>
-                                </svg>
-                            {% elif mode == "watchlist" %}
-                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Remove from My Watchlist" focusable="false">
-                                <path d="M200-446.67v-66.66h560v66.66H200Z"/>
-                                </svg>
-                            {% endif %}
-                            </button>
-                        </form>
-                    {% endif %}
                 </div>
         </div>
     </a>
