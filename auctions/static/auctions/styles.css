@@ -188,8 +188,8 @@ header .isotype-icon-size {
 
 .status-bid-won-message {
     position: relative;
-    height: 2rem;
-    padding: .5rem 1.5rem;
+    height: auto;
+    padding: .5rem 2.5rem;
     font-size: .9rem;
     color: var(--color-quaternary);
     background-color: var(--color-primary);
