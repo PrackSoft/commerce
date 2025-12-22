@@ -169,9 +169,11 @@ header .isotype-icon-size {
     white-space: nowrap;
 }
 /* Ícono activo */
-.navbar-link.active-icon .icon path {
+/* Ícono activo en la barra de navegación */
+.navbar-link.active .icon path {
     fill: var(--color-quaternary) !important;
 }
+
 
 /* GRID RESPONSIVO HEADER */
 /*@media (max-width: 62rem) { header { grid-template-columns: 1fr auto; } }

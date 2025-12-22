@@ -97,10 +97,12 @@ def create_listing(request):
 @never_cache
 def listing_detail(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
-    # Get context including current price and has_bids
-    context = get_listing_context(listing, user=request.user, error=request.GET.get("error", ""))
+    context = get_listing_context(
+        listing, 
+        user=request.user, 
+        error=request.GET.get("error", "")
+    )
     return render(request, "auctions/listing_detail.html", context)
-
 
 @never_cache
 @login_required

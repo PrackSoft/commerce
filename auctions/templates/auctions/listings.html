@@ -14,7 +14,7 @@
     {% endif %}
 
     {% for listing in listings %}
-    <a class="cards-link" href="{% url 'listing_detail' listing.id %}">
+    <a class="cards-link" href="{% url 'listing_detail' listing.id %}?mode={{ mode }}">
         <div class="listings-card">
                 {% if listing.image_url %}
                     <div class="listings-box-image">
