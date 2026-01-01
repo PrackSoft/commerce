@@ -1,3 +1,6 @@
+/* ------------------------------
+                GLOBAL
+   ------------------------------ */
 /* Reset global */
 * {
     margin: 0;
@@ -30,27 +33,33 @@ html, body {
 
     border: 0 solid purple;
 }
-
+/* Texto fuerte */
 strong {
     font-weight: 700;
 }
-
+/* Listas */
 ul { list-style: none; }
+/* Links */
 a { text-decoration: none; color: inherit; }
+/* Imágenes y SVG */
 img, svg {
     display: block;
     max-width: 100%;
     height: auto;
 }
-
+/* Placeholder */
 ::placeholder {
     color: var(--color-primary);
     opacity: .5;
 }
-
+/* Input numérico */
 input[type=number] {
     color: var(--color-primary);
 }
+/* Íconos dentro y fuera de navbar */
+.icon path { 
+    fill: var(--color-tertiary);
+    }
 
 /* ------------------------------
                 HEADER
@@ -69,6 +78,7 @@ header {
 
     border: 0 solid purple;
 }
+/* Caja del isotipo */
 .isotype-box {
     display: flex;
     align-items: center;
@@ -80,7 +90,7 @@ header {
 
     border: 0 solid orange;
 }
-
+/* Título */
 header h1 {
     margin: 0;
     font-family: "Major Mono Display", monospace;
@@ -92,16 +102,14 @@ header h1 {
     padding: 0;
     border: 0 solid red;
 }
-
-
-
+/* Icono del header */
 header .isotype-icon-size {
     width: 70px;
     height: 90px;
 
     border: 0 solid red;
 }
-
+/* Saludo usuario */
 .user-greeting {
     display: flex;
     align-items: center;
@@ -119,7 +127,7 @@ header .isotype-icon-size {
 .user-greeting strong { 
     font-weight: 700; 
 }
-
+/* Navbar */
 .nav-box {
     display: flex;
     flex-wrap: nowrap;
@@ -130,8 +138,7 @@ header .isotype-icon-size {
 
     border: 0 solid orange;
 }
-
-/* Iconos */
+/* Tamaño iconos navbar */
 .navbar-icon-size {
     display: block;
     width: 40px;
@@ -139,35 +146,50 @@ header .isotype-icon-size {
     margin: 0;
     padding: 0;
 }
+/* Item navbar */
 .navbar-item {
     display: flex;
     justify-content: center;
     flex: none;
 }
-/* Ícono inactivo en navbar */
-.icon path { 
-    fill: var(--color-tertiary);
-    }
-.navbar-link {
+/* Íconos SVG */
+/* Link navbar */
+/*.navbar-link {
     position: relative;
     display: inline-block;
     z-index: 1;
+    color: var(--color-tertiary);
+}*/
+.navbar-link {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: .25rem;
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-/* Ícono activo en la barra de navegación */
+/* Ícono inactivo en la barra de navegación */
 .navbar-link .icon path{
     fill: var(--color-tertiary); /* color por defecto */
 }
+/* Hover ícono */
+/*.navbar-link:hover .icon path {
+    fill: var(--color-quaternary);
+}*/
+.navbar-link:hover {
+    background-color: var(--color-secondary);
+}
+/* Cambia el color de fondo cuando hago click */
+/*.navbar-link.active .icon path{
+    fill: var(--color-quaternary); /* color cuando está activo
+}*/
 .navbar-link.active .icon path{
     fill: var(--color-quaternary); /* color cuando está activo */
 }
-.navbar-link:hover .icon path {
-    fill: var(--color-quaternary);
-}
-/* Regla de tooltip en la barra de navegación */
 
-.navbar-link {
-    position: relative;
-}
+/* Regla de tooltip en la barra de navegación */
 
 .navbar-link::after {
     content: attr(data-tip);
