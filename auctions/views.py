@@ -14,15 +14,18 @@ from .models import User, Listing, Watchlist, Bid, Comment, RemovedPurchase
 from .utils import current_price, add_to_watchlist, remove_from_watchlist, get_listing_context
 
 
-def index(request):
-    #Fetch all active listings
-    active_listings = Listing.objects.filter(is_active=True)
-    
-    # Attach dynamic current price to each listing
-    current_price(active_listings)
+def index(request, mode, category_name=None):
+    if mode == "listings":
+        #Fetch all active listings
+        active_listings = Listing.objects.filter(is_active=True)
+        
+        # Attach dynamic current price to each listing
+        current_price(active_listings)
 
     return render(request, "auctions/index.html", {
         "listings": active_listings,
+        "mode": mode,
+        "category_name": category_name,
     })
 
 @login_required
@@ -162,7 +165,10 @@ def listing_detail(request, listing_id):
         user=request.user, 
         error=request.GET.get("error", "")
     )
+    context["mode"] = "listings"
+
     return render(request, "auctions/listing_detail.html", context)
+
 
 @never_cache
 @login_required
