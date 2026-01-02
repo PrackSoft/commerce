@@ -14,17 +14,77 @@ from .models import User, Listing, Watchlist, Bid, Comment, RemovedPurchase
 from .utils import current_price, add_to_watchlist, remove_from_watchlist, get_listing_context
 
 
-#def index(request):
-    # Fetch all active listings
-    #active_listings = Listing.objects.filter(is_active=True)
+def index(request):
+    #Fetch all active listings
+    active_listings = Listing.objects.filter(is_active=True)
     
     # Attach dynamic current price to each listing
-    #current_price(active_listings)
+    current_price(active_listings)
 
-    #return render(request, "auctions/index.html", {
-        #"listings": active_listings,
-    #})
+    return render(request, "auctions/index.html", {
+        "listings": active_listings,
+    })
 
+@login_required
+def unified_listings(request, mode, category_name=None):
+    listings = []
+
+    if mode == "watchlist":
+        listings = Listing.objects.filter(
+            watchlist_entries__user=request.user
+        ).order_by('-id')
+
+    elif mode == "my_listings":
+        listings = Listing.objects.filter(owner=request.user).order_by('-id')
+
+    elif mode == "my_purchases":
+        bids = Bid.objects.filter(bidder=request.user).select_related('listing')
+        listings_set = {bid.listing for bid in bids}
+
+        removed = RemovedPurchase.objects.filter(user=request.user).values_list('listing_id', flat=True)
+
+        listings = []
+        for listing in listings_set:
+            if listing.id in removed:
+                continue
+            if listing.owner == request.user:
+                continue
+            listings.append(listing)
+
+    elif mode == "category":
+        if category_name:
+            listings = Listing.objects.filter(is_active=True, category=category_name)
+        else:
+            listings = Listing.objects.filter(is_active=True)
+
+    #elif mode == "category":
+        #listings = Listing.objects.filter(is_active=True, category=category_name)
+
+    current_price(listings)
+
+    for listing in listings:
+        if mode in ["my_purchases", "watchlist"]:
+            if listing.is_active:
+                listing.status_message = "Active"
+            else:
+                listing.status_message = "YOU WON!" if listing.winner == request.user else "YOU DID NOT WIN."
+        elif mode == "my_listings":
+            listing.status_message = "Active" if listing.is_active else "Closed"
+        elif mode == "category":
+            # Check if user made a bid
+            has_bid = listing.bids.filter(bidder=request.user).exists()
+            if has_bid:
+                listing.status_message = "Bidding"
+            else:
+                # Check if user is watching
+                is_watching = listing.watchlist_entries.filter(user=request.user).exists()
+                listing.status_message = "Watching" if is_watching else ""
+
+    return render(request, "auctions/listings.html", {
+        "listings": listings,
+        "mode": mode,
+        "category_name": category_name,
+    })
 
 def login_view(request):
     if request.method == "POST":
@@ -203,66 +263,7 @@ def categories_view(request):
     })
 
 
-@login_required
-def unified_listings(request, mode, category_name=None):
-    listings = []
 
-    if mode == "watchlist":
-        listings = Listing.objects.filter(
-            watchlist_entries__user=request.user
-        ).order_by('-id')
-
-    elif mode == "my_listings":
-        listings = Listing.objects.filter(owner=request.user).order_by('-id')
-
-    elif mode == "my_purchases":
-        bids = Bid.objects.filter(bidder=request.user).select_related('listing')
-        listings_set = {bid.listing for bid in bids}
-
-        removed = RemovedPurchase.objects.filter(user=request.user).values_list('listing_id', flat=True)
-
-        listings = []
-        for listing in listings_set:
-            if listing.id in removed:
-                continue
-            if listing.owner == request.user:
-                continue
-            listings.append(listing)
-
-    elif mode == "category":
-        if category_name:
-            listings = Listing.objects.filter(is_active=True, category=category_name)
-        else:
-            listings = Listing.objects.filter(is_active=True)
-
-    #elif mode == "category":
-        #listings = Listing.objects.filter(is_active=True, category=category_name)
-
-    current_price(listings)
-
-    for listing in listings:
-        if mode in ["my_purchases", "watchlist"]:
-            if listing.is_active:
-                listing.status_message = "Active"
-            else:
-                listing.status_message = "YOU WON!" if listing.winner == request.user else "YOU DID NOT WIN."
-        elif mode == "my_listings":
-            listing.status_message = "Active" if listing.is_active else "Closed"
-        elif mode == "category":
-            # Check if user made a bid
-            has_bid = listing.bids.filter(bidder=request.user).exists()
-            if has_bid:
-                listing.status_message = "Bidding"
-            else:
-                # Check if user is watching
-                is_watching = listing.watchlist_entries.filter(user=request.user).exists()
-                listing.status_message = "Watching" if is_watching else ""
-
-    return render(request, "auctions/listings.html", {
-        "listings": listings,
-        "mode": mode,
-        "category_name": category_name,
-    })
 
 
 

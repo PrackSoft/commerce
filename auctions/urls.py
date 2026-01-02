@@ -3,9 +3,9 @@ from . import views
 
 urlpatterns = [
     # Home page showing all active listings
-    #path("", views.index, name="listings"),
+    path("", views.index, name="listings"),
     
-    path("", views.unified_listings, {"mode": "category"}, name="listings"),
+    #path("", views.unified_listings, {"mode": "category"}, name="listings"),
 
     #path("", views.unified_listings, {"mode": "category", "category_name": None}, name="listings"),
     #path("", views.unified_listings, {"mode": "category"}, name="listings"),
