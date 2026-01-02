@@ -14,16 +14,16 @@ from .models import User, Listing, Watchlist, Bid, Comment, RemovedPurchase
 from .utils import current_price, add_to_watchlist, remove_from_watchlist, get_listing_context
 
 
-def index(request):
+#def index(request):
     # Fetch all active listings
-    active_listings = Listing.objects.filter(is_active=True)
+    #active_listings = Listing.objects.filter(is_active=True)
     
     # Attach dynamic current price to each listing
-    current_price(active_listings)
+    #current_price(active_listings)
 
-    return render(request, "auctions/index.html", {
-        "listings": active_listings,
-    })
+    #return render(request, "auctions/index.html", {
+        #"listings": active_listings,
+    #})
 
 
 def login_view(request):
@@ -35,7 +35,7 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("listings"))
         else:
             return render(request, "auctions/login.html", {
                 "message": "Invalid username and/or password."
@@ -47,7 +47,7 @@ def login_view(request):
 def logout_view(request):
     # Log out the current user
     logout(request)
-    return HttpResponseRedirect(reverse("index"))
+    return HttpResponseRedirect(reverse("listings"))
 
 
 def register(request):
@@ -72,7 +72,7 @@ def register(request):
             })
 
         login(request, user)
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("listings"))
     else:
         return render(request, "auctions/register.html")
 
@@ -88,7 +88,7 @@ def create_listing(request):
             listing.owner = request.user
             listing.is_active = True
             listing.save()
-            return redirect('index')
+            return redirect('listings')
     else:
         form = ListingForm()
 
@@ -202,6 +202,7 @@ def categories_view(request):
         "categories": categories
     })
 
+
 @login_required
 def unified_listings(request, mode, category_name=None):
     listings = []
@@ -229,7 +230,13 @@ def unified_listings(request, mode, category_name=None):
             listings.append(listing)
 
     elif mode == "category":
-        listings = Listing.objects.filter(is_active=True, category=category_name)
+        if category_name:
+            listings = Listing.objects.filter(is_active=True, category=category_name)
+        else:
+            listings = Listing.objects.filter(is_active=True)
+
+    #elif mode == "category":
+        #listings = Listing.objects.filter(is_active=True, category=category_name)
 
     current_price(listings)
 
@@ -282,4 +289,4 @@ def remove_listing_from_mode(request, listing_id):
         return redirect("my_purchases")
     else:
         # Modo inesperado o listing propio en watchlist
-        return redirect("index")  # o cualquier página segura
+        return redirect("listings")  # o cualquier página segura

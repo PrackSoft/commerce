@@ -30,7 +30,14 @@
             </div>
             <ul class="nav-box">
                 <li class="navbar-item">
-                    <a class="navbar-link {% if request.path == '/' %}active{% endif %}" data-tip="Listings" href="{% url 'index' %}">
+
+                    <a class="navbar-link {% if request.path == '/' or request.GET.mode == 'listings' %}active{% endif %}" data-tip="Listings" href="{% url 'listings' %}">
+
+                    <!--<a class="navbar-link {% if request.path == '/' or request.GET.mode == 'listings' %}active{% endif %}" data-tip="Listings" href="{% url 'listings' %}">-->
+
+                    <!--<a class="navbar-link {% if request.path == '/' or request.GET.mode == '/' %}active{% endif %}" data-tip="Listings" href="{% url 'listings' %}">-->
+
+                    <!--<a class="navbar-link {% if request.path == '/' %}active{% endif %}" data-tip="Listings" href="{% url 'listings' %}">-->
                         <svg class="icon navbar-icon-size" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Active Listings" focusable="false"> 
                             <path d="M230.67-160q-29.67 0-50.17-20.5T160-230.67q0-29.66 20.5-50.16 20.5-20.5 50.17-20.5 29.66 0 50.16 20.5 20.5 20.5 20.5 50.16 0 29.67-20.5 50.17T230.67-160ZM480-160q-29.67 0-50.17-20.5t-20.5-50.17q0-29.66 20.5-50.16 20.5-20.5 50.17-20.5t50.17 20.5q20.5 20.5 20.5 50.16 0 29.67-20.5 50.17T480-160Zm249.33 0q-29.66 0-50.16-20.5-20.5-20.5-20.5-50.17 0-29.66 20.5-50.16 20.5-20.5 50.16-20.5 29.67 0 50.17 20.5t20.5 50.16q0 29.67-20.5 50.17T729.33-160ZM230.67-409.33q-29.67 0-50.17-20.5T160-480q0-29.67 20.5-50.17t50.17-20.5q29.66 0 50.16 20.5 20.5 20.5 20.5 50.17t-20.5 50.17q-20.5 20.5-50.16 20.5Zm249.33 0q-29.67 0-50.17-20.5T409.33-480q0-29.67 20.5-50.17t50.17-20.5q29.67 0 50.17 20.5t20.5 50.17q0 29.67-20.5 50.17T480-409.33Zm249.33 0q-29.66 0-50.16-20.5-20.5-20.5-20.5-50.17t20.5-50.17q20.5-20.5 50.16-20.5 29.67 0 50.17 20.5T800-480q0 29.67-20.5 50.17t-50.17 20.5ZM230.67-658.67q-29.67 0-50.17-20.5T160-729.33q0-29.67 20.5-50.17t50.17-20.5q29.66 0 50.16 20.5 20.5 20.5 20.5 50.17 0 29.66-20.5 50.16-20.5 20.5-50.16 20.5Zm249.33 0q-29.67 0-50.17-20.5t-20.5-50.16q0-29.67 20.5-50.17T480-800q29.67 0 50.17 20.5t20.5 50.17q0 29.66-20.5 50.16-20.5 20.5-50.17 20.5Zm249.33 0q-29.66 0-50.16-20.5-20.5-20.5-20.5-50.16 0-29.67 20.5-50.17t50.16-20.5q29.67 0 50.17 20.5t20.5 50.17q0 29.66-20.5 50.16-20.5 20.5-50.17 20.5Z" fill="currentColor"/>
                         </svg>
@@ -47,7 +54,11 @@
                 </li>
 
                 <li class="navbar-item">
-                    <a class="navbar-link {% if '/my_listings/' in request.path %}active{% endif %}" data-tip="My Listings" href="{% url 'my_listings' %}">
+                    <a class="navbar-link {% if request.path == '/my_listings/' or request.GET.mode == 'my_listings' %}active{% endif %}" data-tip="My Listings" href="{% url 'my_listings' %}">
+
+                    <!--<a class="navbar-link {% if request.GET.mode == 'my_listings' %}active{% endif %}" data-tip="My Listings" href="{% url 'my_listings' %}">-->
+
+                    <!--<a class="navbar-link {% if '/my_listings/' in request.path %}active{% endif %}" data-tip="My Listings" href="{% url 'my_listings' %}">-->
                         <svg class="icon navbar-icon-size" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="My Listings" focusable="false">
                             <path d="M840.33-518.67v332q0 27-19.83 46.84Q800.67-120 773.67-120H186.33q-27 0-46.83-19.83-19.83-19.84-19.83-46.84v-332q-26.34-23-36.5-57.33-10.17-34.33 1.16-70.67L127-782q8-26.67 28.17-42.33Q175.33-840 201.67-840h554q27.66 0 48.33 15.83 20.67 15.84 29 42.17l43.33 135.33q11.34 36.34.84 70.34t-36.84 57.66Zm-270.66-34.66q28.33 0 46.33-18.84 18-18.83 14.33-44.5l-24-156.66h-92.66V-614q0 24.33 16 42.5t40 18.17Zm-184.67 0q26.33 0 44.17-17.84Q447-589 447-614v-159.33h-92.67l-24 156.66q-4 25.34 12.84 44.34 16.83 19 41.83 19Zm-180.67 0q22 0 38.17-15.34 16.17-15.33 19.17-38l24.66-166.66h-92.66l-44 142q-8.67 27.33 7.5 52.66 16.16 25.34 47.16 25.34Zm551.34 0q31 0 47.66-25 16.67-25 7.67-53l-44.67-142h-92L699-606.67q3 22.67 19.17 38 16.16 15.34 37.5 15.34ZM186.33-186.67h587.34V-488q-1 1.33-6.5 1.33h-11.5q-25.67 0-47.5-10-21.84-10-43.17-31.33-16.67 19.33-40.33 30.33-23.67 11-51.67 11-29 0-51.17-9-22.16-9-41.5-28.33-15.66 18-38.5 27.67-22.83 9.66-50.83 9.66-30.33 0-54.17-10.66Q313-508 295.67-528q-23 21-45.17 31.17-22.17 10.16-46.17 10.16h-10.5q-5.16 0-7.5-1.33v301.33Zm587.34 0H186.33h587.34Z" fill="currentColor"/>
                         </svg>
@@ -55,7 +66,9 @@
                 </li>
 
                 <li class="navbar-item">
-                    <a class="navbar-link {% if '/categories/' in request.path %}active{% endif %}" data-tip="Categories" href="{% url 'categories' %}">
+                    <a class="navbar-link {% if request.path == '/categories/' or request.GET.mode == 'categories' %}active{% endif %}" data-tip="Categories" href="{% url 'categories' %}">
+
+                    <!--<a class="navbar-link {% if '/categories/' in request.path %}active{% endif %}" data-tip="Categories" href="{% url 'categories' %}">-->
                         <svg class="icon navbar-icon-size" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Categories" focusable="false">
                             <path d="M80-143.33v-309.34h309.33v309.34H80ZM146.67-210h176v-176h-176v176Zm74-354 220-356 220 356h-440ZM340-630.67h201.33L440.67-793.33 340-630.67ZM867.67-48 765-150.67Q743.33-136 717.76-128q-25.58 8-53.76 8-74.33 0-125.17-50.83Q488-221.67 488-296t50.83-125.17Q589.67-472 664-472t125.17 50.83Q840-370.33 840-296q0 27.33-7.35 51.83-7.34 24.5-20.98 45.5L915-95.33 867.67-48ZM664.06-186.67q45.94 0 77.61-31.72 31.66-31.72 31.66-77.67 0-45.94-31.72-77.61-31.72-31.66-77.67-31.66-45.94 0-77.61 31.72-31.66 31.72-31.66 77.67 0 45.94 31.72 77.61 31.72 31.66 77.67 31.66ZM322.67-386Zm118-244.67Z" fill="currentColor"/>
                         </svg>
@@ -63,7 +76,9 @@
                 </li>
 
                 <li class="navbar-item">
-                    <a class="navbar-link {% if '/my_purchases/' in request.path %}active{% endif %}" data-tip="My Purchases" href="{% url 'my_purchases' %}">
+                    <a class="navbar-link {% if request.path == '/my_purchases/' or request.GET.mode == 'my_purchases' %}active{% endif %}" data-tip="My Purchases" href="{% url 'my_purchases' %}">
+
+                    <!--<a class="navbar-link {% if '/my_purchases/' in request.path %}active{% endif %}" data-tip="My Purchases" href="{% url 'my_purchases' %}">-->
                         <svg class="icon navbar-icon-size" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="My purchases" focusable="false">
                             <path d="M226.67-80q-27 0-46.84-19.83Q160-119.67 160-146.67v-506.66q0-27 19.83-46.84Q199.67-720 226.67-720h100v-6.67q0-64 44.66-108.66Q416-880 480-880t108.67 44.67q44.66 44.66 44.66 108.66v6.67h100q27 0 46.84 19.83Q800-680.33 800-653.33v506.66q0 27-19.83 46.84Q760.33-80 733.33-80H226.67Zm0-66.67h506.66v-506.66h-100v86.66q0 14.17-9.61 23.75-9.62 9.59-23.84 9.59-14.21 0-23.71-9.59-9.5-9.58-9.5-23.75v-86.66H393.33v86.66q0 14.17-9.61 23.75-9.62 9.59-23.84 9.59-14.21 0-23.71-9.59-9.5-9.58-9.5-23.75v-86.66h-100v506.66ZM393.33-720h173.34v-6.67q0-36.33-25.17-61.5-25.17-25.16-61.5-25.16t-61.5 25.16q-25.17 25.17-25.17 61.5v6.67ZM226.67-146.67v-506.66 506.66Z" fill="currentColor"/>
                         </svg>
@@ -71,7 +86,9 @@
                 </li>
 
                 <li class="navbar-item">
-                    <a class="navbar-link {% if '/watchlist/' in request.path %}active{% endif %}" data-tip="Watchlist" href="{% url 'watchlist' %}">
+                    <a class="navbar-link {% if request.path == '/watchlist/' or request.GET.mode == 'watchlist' %}active{% endif %}" data-tip="Watchlist" href="{% url 'watchlist' %}">
+
+                    <!--<a class="navbar-link {% if '/watchlist/' in request.path %}active{% endif %}" data-tip="Watchlist" href="{% url 'watchlist' %}">-->
                         <svg class="icon navbar-icon-size" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img" aria-label="Watchlist" focusable="false">
                             <path d="M480.08-326.67q72.25 0 122.75-50.58 50.5-50.57 50.5-122.83 0-72.25-50.58-122.75-50.57-50.5-122.83-50.5-72.25 0-122.75 50.58-50.5 50.57-50.5 122.83 0 72.25 50.58 122.75 50.57 50.5 122.83 50.5Zm-.24-62.66q-46.17 0-78.34-32.33-32.17-32.32-32.17-78.5 0-46.17 32.33-78.34 32.32-32.17 78.5-32.17 46.17 0 78.34 32.33 32.17 32.32 32.17 78.5 0 46.17-32.33 78.34-32.32 32.17-78.5 32.17ZM480-200q-146 0-264.67-82.5Q96.67-365 40-500q56.67-135 175.33-217.5Q334-800 480-800t264.67 82.5Q863.33-635 920-500q-56.67 135-175.33 217.5Q626-200 480-200Zm0-300Zm-.11 233.33q118.44 0 217.61-63.5 99.17-63.5 151.17-169.83-52-106.33-151.06-169.83-99.05-63.5-217.5-63.5-118.44 0-217.61 63.5-99.17 63.5-151.83 169.83 52.66 106.33 151.72 169.83 99.05 63.5 217.5 63.5Z" fill="currentColor"/>
                         </svg>
