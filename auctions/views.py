@@ -15,12 +15,12 @@ from .utils import current_price, add_to_watchlist, remove_from_watchlist, get_l
 
 
 def index(request, mode, category_name=None):
-    if mode == "listings":
-        #Fetch all active listings
-        active_listings = Listing.objects.filter(is_active=True)
-        
-        # Attach dynamic current price to each listing
-        current_price(active_listings)
+
+    # Fetch all active listings
+    active_listings = Listing.objects.filter(is_active=True)
+    
+    # Attach dynamic current price to each listing
+    current_price(active_listings)
 
     return render(request, "auctions/index.html", {
         "listings": active_listings,
@@ -53,15 +53,13 @@ def unified_listings(request, mode, category_name=None):
             if listing.owner == request.user:
                 continue
             listings.append(listing)
-
+            
     elif mode == "category":
         if category_name:
             listings = Listing.objects.filter(is_active=True, category=category_name)
         else:
             listings = Listing.objects.filter(is_active=True)
-
-    #elif mode == "category":
-        #listings = Listing.objects.filter(is_active=True, category=category_name)
+        mode = "categories"
 
     current_price(listings)
 
@@ -162,11 +160,11 @@ def listing_detail(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
     context = get_listing_context(
         listing, 
-        user=request.user, 
+        user=request.user,
         error=request.GET.get("error", "")
     )
-    context["mode"] = "listings"
-
+    context['mode'] = request.GET.get("mode")
+    
     return render(request, "auctions/listing_detail.html", context)
 
 
@@ -259,19 +257,18 @@ def add_comment(request, listing_id):
 
 
 @login_required
-def categories_view(request):
-    # Fetch all unique categories with active listings
-    listings = Listing.objects.filter(is_active=True)
-    categories = sorted({listing.category for listing in listings if listing.category})
+def categories_view(request, mode, category_name=None):
+    if mode == "categories":
+        # Fetch all unique categories with active listings
+        listings = Listing.objects.filter(is_active=True)
+        categories = sorted({listing.category for listing in listings if listing.category})
 
     return render(request, "auctions/categories.html", {
-        "categories": categories
+        "categories": categories,
+        "mode": mode,
+        "category_name": category_name,
     })
-
-
-
-
-
+    
 
 @login_required
 def remove_listing_from_mode(request, listing_id):

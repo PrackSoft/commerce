@@ -28,5 +28,5 @@ urlpatterns = [
     path("my_purchases/", views.unified_listings, {"mode": "my_purchases"}, name="my_purchases"),
 
     # Categories
-    path("categories/", views.categories_view, name="categories"),
+    path("categories/", views.categories_view, {"mode": "categories"}, name="categories"),
 ]

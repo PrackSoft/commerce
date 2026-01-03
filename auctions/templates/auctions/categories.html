@@ -2,7 +2,7 @@
 
 {% block body %}
     {% for category in categories %}
-    <a href="{% url 'category_listings' category_name=category %}">
+    <a href="{% url 'category_listings' category_name=category %}?mode=categories">
         <div class="category-item">
             <p>{{ category }}</p>
         </div>

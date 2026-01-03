@@ -3,7 +3,7 @@
 {% block body %}
 <main class="index-container">
         {% for listing in listings %}
-        <a class="cards-link" href="{% url 'listing_detail' listing.id %}">
+        <a class="cards-link" href="{% url 'listing_detail' listing.id %}?mode={{ mode }}">
             <div class="index-card">
                 {% if listing.image_url %}
                     <div class="index-box-image">

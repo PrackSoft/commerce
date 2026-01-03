@@ -11,6 +11,9 @@
         {% elif mode == "my_listings" %}
             <p>You have not created any listings.</p>
         {% endif %}
+        {% if listings|length == 0 %}
+            <p>No listings in this category.</p>
+        {% endif %}
     {% endif %}
 
     {% for listing in listings %}
