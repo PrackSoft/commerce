@@ -1,27 +1,29 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<main class="index-container">
+<main class="listings-container">
         {% for listing in listings %}
         <a class="cards-link" href="{% url 'listing_detail' listing.id %}?mode={{ mode }}">
-            <div class="index-card">
+            <div class="listings-card">
                 {% if listing.image_url %}
-                    <div class="index-box-image">
+                    <div class="listings-box-image">
                         <img src="{{ listing.image_url }}" alt="{{ listing.title }}">
                     </div>
                 {% endif %}
-                <div class="index-box-description">
-                    <h5 class="index-title">{{ listing.title }}</h5>
-                    <div class="index-box-text">
-                        <p class="index-text-justify">{{ listing.description }}</p>
+                <div class="listings-box-description">
+                    <div>
+                        <h5 class="listings-title">{{ listing.title }}</h5>
+                        <div class="listings-box-text">
+                            <p class="listings-text-justify">{{ listing.description }}</p>
+                        </div>
+                        <h5 class="listings-price">
+                            {% if listing.has_bids %}
+                                Now: ${{ listing.current_price }}
+                            {% else %}
+                                From: ${{ listing.starting_bid }}
+                            {% endif %}
+                        </h5>
                     </div>
-                    <h5 class="index-price">
-                        {% if listing.has_bids %}
-                            Now: ${{ listing.current_price }}
-                        {% else %}
-                            From: ${{ listing.starting_bid }}
-                        {% endif %}
-                    </h5>
                 </div>
             </div>
         </a>

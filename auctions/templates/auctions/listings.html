@@ -34,7 +34,13 @@
                         <div class="listings-box-text">
                             <p class="listings-text-justify">{{ listing.description }}</p>
                         </div>
-                        <h5 class="index-price">Now: ${{ listing.current_price }}</p>
+                        <h5 class="listings-price">
+                            {% if listing.has_bids %}
+                                Now: ${{ listing.current_price }}
+                            {% else %}
+                                From: ${{ listing.starting_bid }}
+                            {% endif %}
+                        </h5>
                     </div>
                     <div>
                         {% if mode in "my_purchases watchlist" %}
